@@ -1,6 +1,6 @@
 # Project Explorer
 
-The project explorer is a [VSCode extension](/design_docs/vscode_extensions.md) that helps developers navigate and manage their projects more effectively. The extension is developed by team `ftl-tools` and has id `project-explorer`. The extension is released under the MIT license. For now we'll leave the repository blank. The code for the extension can be found in the `outputs/vscode_extension_code/` folder. This document outlines the major parts of the extension and how they work together.
+The project explorer is a [VSCode extension](/design_docs/vscode_extensions.md) that helps developers navigate and manage their projects more effectively. The extension is developed by team `ftl-tools` and has id `project-explorer`. The extension is released under the MIT license, it's repository field is this repository. The code for the extension can be found in the `outputs/vscode_extension_code/` folder. This document outlines the major parts of the extension and how they work together.
 
 ## Project Explorer Views
 

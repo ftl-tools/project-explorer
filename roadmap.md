@@ -13,7 +13,7 @@
 - [x] Test out configuring user-defined items in a sample workspace
 - [x] Add a collapse all action icon to the tree view
 - [x] Move the code to a new repo called `project-explorer` under the `ftl-tools` github org. Make it public and give it an MIT license.
-- [ ] Generate a README.md for the extension.
+- [x] Generate a README.md for the extension.
 - [ ] Publish the extension to the VSCode marketplace
 - [ ] Add the help action icon (show the extension readme in the marketplace)
 

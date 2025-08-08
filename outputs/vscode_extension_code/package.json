@@ -2,9 +2,13 @@
   "name": "project-explorer",
   "displayName": "Project Explorer",
   "description": "A VSCode extension that helps developers navigate and manage their projects more effectively",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "publisher": "ftl-tools",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ftl-tools/project-explorer.git"
+  },
   "engines": {
     "vscode": "^1.74.0"
   },
