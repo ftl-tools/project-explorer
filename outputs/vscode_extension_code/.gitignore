@@ -1,0 +1,19 @@
+# Node
+node_modules/
+.npm/
+
+# Build output
+out/
+
+# VS Code Extension testing
+.vscode-test/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Tooling caches
+.eslintcache
+
+# Package artifacts generated temporarily here before being moved
+*.vsix
