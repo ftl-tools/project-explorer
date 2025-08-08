@@ -1,0 +1,1 @@
+Please write the `## Output JSON Format` and `## Examples` section of the @design_docs/project_parser/parsing_flask_backend_files.md doc, use @design_docs/project_parser/parsing_root_vuex_store_files.md and @design_docs/project_parser/parsing_vue_router_files.md as reference.

@@ -1,0 +1,27 @@
+# Brainstorming
+
+- Use the tree item hierarchy to figure out how to break up large python files in to smaller more reasonable ones.
+- Add an "Explorer Brainstorming" item to the top of the tree that opens a markdown file in the editor for the whole team to dump ideas for the explorer into. This file should live in docs somewhere.
+- Top Level tree items could be something like?
+  - Docs
+  - Infra
+    - Bucket: Links to our gcp bucket
+    - Functions: Links to our cloud functions
+    - Tables: Links to our SQL tables
+    - Common Python: - Links to db.py
+  - Apps
+    - Employee App: Contains all pages organized by the main menu
+    - Operations Dashboard
+    - Settings App
+    - UI Components: Contains all reusable UI components
+- Automatically generate cursor rules that cluster related files. For python files we should reference only the lines that are relevant to the class or endpoint. Globs should be used to connect all of these to all relevant files.
+- Have a `extension_distribution.md` file that describes how to increment the build number, build the extension, and publish it privately to our team. It also outlines how the automatic update process works.
+- Have a "Model" tree item that renders a full page mermaid diagram of all the tables and how they connect to each other. Clicking on the nodes should open the table class in the editor.
+  - In a similar way it would be cool to have a mermaid diagram that shows the whole flow of data for a single page. Make every helper function a labeled arrow or something, and show everything from the db props to the vuex store to the vue component. Probably with AI summaries for each step to help explain what is going on. Also would be cool to have related cloud functions show up in this diagram. Clicking on the nodes should open the right place in the code.
+  - Having a page node graph of the app, with snapshots of each page and lines connecting them so you can see the flow of the UI. Clicking on the nodes should open the page in the editor.
+- Automatically select a page item in the explorer when the user swaps to the editor tab for that page.
+- See if we can create a `/apply` command for open-code. Or maybe make a cli like `app apply`. The cli could be invoked via either `app` or `appinator`.
+- See the bucket images referenced in UI Components.
+- Have an action icon setting that shows a drop down to toggle what kinds of things are visible in the tree view. This should be per user not per workspace.
+- Figure out how and where to show cloud functions in the tree view.
+- Have a "Reports" tree item that shows daily or weekly reports of what everyone has done. Summaries of their commits, the Jira items they checked off. Any Jira organizing they've done, Their slack messages, etc... These reports need to be short so Will can skim them quickly, but they should give him a view of what everyone is doing and how things are moving.

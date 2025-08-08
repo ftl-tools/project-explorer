@@ -1,0 +1,1 @@
+Please find all design docs and walkthrough them one at a time, comparing them to their code implementation. If the docs are accurate leave them as they are, do not add any details that seem to be missing. Only fix inaccurate statements.

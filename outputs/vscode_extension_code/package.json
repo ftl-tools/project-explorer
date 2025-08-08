@@ -1,0 +1,150 @@
+{
+  "name": "project-explorer",
+  "displayName": "Project Explorer",
+  "description": "A VSCode extension that helps developers navigate and manage their projects more effectively",
+  "version": "0.1.21",
+  "publisher": "ftl-tools",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:projectExplorer",
+    "onCommand:projectExplorer.openBrainstormingDoc",
+    "onCommand:projectExplorer.openSettings",
+    "onCommand:projectExplorer.configureTreeItems",
+    "onCommand:projectExplorer.collapseAll"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "Project Explorer",
+      "properties": {
+        "project-explorer.brainstormingDocPath": {
+          "type": "string",
+          "scope": "resource",
+          "markdownDescription": "Absolute path, `~` expansion, or path relative to the first workspace folder pointing to your brainstorming document."
+        },
+        "project-explorer.treeItems": {
+          "type": "array",
+          "scope": "resource",
+          "default": [],
+          "markdownDescription": "User-defined items that appear in the Project Explorer tree.",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "markdownDescription": "Unique identifier for the item. Must be unique across all items."
+              },
+              "typeAndPath": {
+                "type": "string",
+                "markdownDescription": "One of `file:path/to/file`, `folder:path/to/folder`, or `url:https://...`."
+              },
+              "icon": {
+                "type": "string",
+                "markdownDescription": "Optional codicon (e.g., `$(rocket)`) or image path (`.svg`, `.png`)."
+              },
+              "label": {
+                "type": "string",
+                "markdownDescription": "Optional label. Defaults to the last segment of the path or hostname for URLs."
+              },
+              "parentId": {
+                "type": "string",
+                "markdownDescription": "Optional parent item id for nesting."
+              }
+            }
+          }
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "projectExplorer.openBrainstormingDoc",
+        "title": "Brainstorming",
+        "category": "Project Explorer",
+        "icon": {
+          "light": "resources/icons/lightbulb.light_mode.svg",
+          "dark": "resources/icons/lightbulb.dark_mode.svg"
+        }
+      },
+      {
+        "command": "projectExplorer.openSettings",
+        "title": "Project Explorer Settings",
+        "category": "Project Explorer",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "projectExplorer.configureTreeItems",
+        "title": "Project Explorer: Configure Tree Items…",
+        "category": "Project Explorer"
+      },
+      {
+        "command": "projectExplorer.collapseAll",
+        "title": "Collapse All",
+        "category": "Project Explorer",
+        "icon": "$(collapse-all)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "projectExplorer.openBrainstormingDoc",
+          "when": "view == projectExplorer && projectExplorer.hasBrainstorming",
+          "group": "navigation@10"
+        },
+        {
+          "command": "projectExplorer.openSettings",
+          "when": "view == projectExplorer",
+          "group": "navigation@20"
+        },
+        {
+          "command": "projectExplorer.collapseAll",
+          "when": "view == projectExplorer",
+          "group": "navigation@30"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "projectExplorer",
+          "name": "Project Explorer",
+          "when": "true"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "build": "node build.js",
+    "lint": "eslint src --ext ts",
+    "test": "echo \"No tests specified\"",
+    "test:ui": "extest setup-and-run --workspace tests/ui/workspace --tests out/test/ui --disable-extensions",
+    "test:ui:headed": "extest setup-and-run --workspace tests/ui/workspace --tests out/test/ui --disable-extensions --headless=false"
+  },
+  "devDependencies": {
+    "@types/node": "16.x",
+    "@types/vscode": "^1.74.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "@vscode/vsce": "^3.6.0",
+    "esbuild": "^0.17.0",
+    "eslint": "^8.28.0",
+    "typescript": "^4.9.4",
+    "vscode-extension-tester": "^7.3.0",
+    "selenium-webdriver": "^4.23.0",
+    "mocha": "^10.2.0",
+    "@types/mocha": "^10.0.1",
+    "ts-node": "^10.9.1"
+  }
+}

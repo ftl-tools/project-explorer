@@ -1,0 +1,40 @@
+- When documenting tables we want to know when and how to filter by each property. We also need to know the valid values for each property, and which properties are inter-dependent.
+- When converting a Figma design to code:
+  - 1. List all the UI elements that have been created, updated, or deleted.
+  - 2. Fill out the questionnaire below for each UI element, and put it in a plan doc.
+    - Is it an Input if so:
+      - Does it have a label? If so:
+        - What does the label say?
+        - Where is the label? On the left? On top?
+      - Does it have a hint label / placeholder? If so what does it say?
+      - If it is a dropdown, what are the valid options? Is it searchable? Is it multi-select?
+      - If it is/has an input field, what keyboard type should be used?
+      - What is the default value? Is it empty?
+      - How do we calculate if its value is valid?
+      - What will we do to ensure validity?
+        - Ways of becoming invalid
+          - If the value is already invalid. (This can happen either by the value having been set somewhere else or by the valid options changing)
+          - If the value is about to change to something invalid.
+        - Ways of handling validity (Note that we might pick different handlings for different cases. We might prevent letters from being entered into a numeric input, but show an error message on the same input if the user has typed a number that is too big.)
+          - Change the value to a valid option
+          - Change the value to nothing so it can be re-entered correctly
+          - Prevent invalid inputs
+          - Leave the value as is, but show an error message in the UI
+            - If showing an error message in the UI, we need to know:
+              - Where do we put the error message? Before the input? After the input? At the bottom of the form near the submit button? Multiple places?
+              - When does it show? Immediately? On blur? When the submit button is pressed?
+              - What does the error message say in different cases?
+      - When is it visible?
+      - When is it enabled?
+      - Is it possible that any of the above data will not be loaded initially? If so what will we do or show before the data is loaded?
+    - Is it a ...
+  - 3. Implement all the UI elements in code.
+
+## Mel's Plans
+
+- UI Improvements
+  - Map out all UI components used in the app, and make a plan for what each component needs to do.
+  - Add all Jono's text presets to the text component so we can start using it.
+  - Look at the give coins UI and see what we can theoretically compress it to if we use the new UI questionnaire.
+  - Sketch up applying our UI improvements the Create Delivery UI for Ninety Percent, and think about how that would work.
+- Improve the table documentation prompt and examples to unify the format.

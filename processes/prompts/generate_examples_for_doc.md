@@ -1,0 +1,1 @@
+I've recently written the `/design_docs/project_parser/parsing_vuex_store_module_files.md`. I need you to finish the`## Output Json Format` and `## Examples` sections. Reference other parser docs and use a similar format for the output and example.

@@ -1,0 +1,13 @@
+/outputs/vscode_extension_code/node_modules/
+/outputs/vscode_extension_code/.vscode-test/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
