@@ -461,17 +461,36 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
 
         const env = { ...process.env, ...(node.script.env || {}) } as NodeJS.ProcessEnv;
         const child = spawn(node.script.cmd, { shell: true, cwd, env });
-        child.on('error', err => {
-            vscode.window.showErrorMessage(`Failed to start script '${id}': ${err instanceof Error ? err.message : String(err)}`);
-        });
-        const done = () => {
+
+        let stdout = '';
+        let stderr = '';
+        child.stdout?.on('data', d => { stdout += d instanceof Buffer ? d.toString('utf8') : String(d); });
+        child.stderr?.on('data', d => { stderr += d instanceof Buffer ? d.toString('utf8') : String(d); });
+
+        let notified = false;
+        const finish = (ok: boolean, message?: string) => {
+            if (!notified) {
+                notified = true;
+                if (ok) {
+                    const out = (message ?? stdout).trim();
+                    vscode.window.showInformationMessage(out.length > 0 ? out : `Script '${id}' completed successfully.`);
+                } else {
+                    const err = (message ?? stderr).trim();
+                    vscode.window.showErrorMessage(err.length > 0 ? err : `Script '${id}' failed.`);
+                }
+            }
             this.running.delete(id);
             node.label = originalLabel;
             node.command = { command: 'projectExplorer.runScript', title: 'Run Script', arguments: [id] };
             this._onDidChangeTreeData.fire(node);
         };
-        child.on('exit', () => done());
-        child.on('close', () => done());
+
+        child.on('error', err => {
+            finish(false, `Failed to start script '${id}': ${err instanceof Error ? err.message : String(err)}`);
+        });
+        child.on('close', (code: number | null) => {
+            finish(code === 0);
+        });
     }
 
     private parseCodicon(s: string): string | null {

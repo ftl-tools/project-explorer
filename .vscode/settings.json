@@ -4,6 +4,11 @@
   "project-explorer.brainstormingDocPath": "brainstorming.md",
   "project-explorer.treeItems": [
     {
+      "id": "build",
+      "label": "Build",
+      "typeAndPath": "script:npm run build --prefix='outputs/vscode_extension_code'"
+    },
+    {
       "icon": "$(globe)",
       "id": "quickLinks",
       "label": "Quick Links"

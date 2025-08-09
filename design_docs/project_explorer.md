@@ -131,7 +131,7 @@ Let's break these down in detail:
   - `file:path/to/file.txt`: When tapped open the file in the editor. When no icon is specified, use the default icon for this file type.
   - `folder:path/to/folder`: When tapped open the folder in the explorer. When no icon is specified, use the default icon for this file type.
   - `url:https://example.com`: When tapped open the URL in an external browser. When no icon is specified, attempt to fetch and use the site’s favicon; while loading show the VS Code globe codicon (`$(globe)`), and if favicon fetching fails, keep using the globe.
-  - `script:<command and args>`: When tapped run the command headlessly using the system shell. Script items have the VS Code run codicon (`$(run)`) by default, cannot have children, and are disabled while running. While running, append `...` to the label. Optional `cwd` and `env` fields control working directory and environment variables.
+  - `script:<command and args>`: When tapped run the command headlessly using the system shell. Script items have the VS Code run codicon (`$(run)`) by default, cannot have children, and are disabled while running. While running, append `...` to the label. Optional `cwd` and `env` fields control working directory and environment variables. If the script succeeds show a pop-up with the output, and if it fails show an error pop-up with the error message. Only one run per item may be active at a time.
 
   <details>
   <summary>Test that</summary>
@@ -141,6 +141,11 @@ Let's break these down in detail:
   - Clicking a `folder:` item reveals the folder in the VS Code Explorer if it exists; if it does not exist, an error is shown and no action is taken. When `icon` is omitted, the default folder icon is used.
   - Clicking a `url:` item opens the URL in the system browser. When `icon` is omitted, the VS Code globe codicon is used.
   - Clicking a `script:` item runs the command in a headless background task. When `icon` is omitted, the run codicon is used. While running, the item is disabled and its label appends `...`; upon completion, the label reverts and the item is re-enabled. Only one run per item may be active at a time.
+  - On successful completion of a `script:` item (exit code 0), an information notification pops up showing the process output.
+  - On failure of a `script:` item (non-zero exit or spawn error), an error notification pops up showing the error message or standard error.
+  - Attempting to start a `script:` item while it is already running does not start another run and does not open additional pop-ups; the existing run continues.
+  - Different `script:` items can run concurrently; each one has its own disabled state, `...` suffix while running, and completion notification.
+  - After a `script:` item completes, clicking it again starts a new run and a new notification is shown upon completion.
   - For `script:` items, `cwd` sets the process working directory (supports absolute paths, `~`, and paths relative to the first workspace folder); `env` adds/overrides environment variables for the process. Invalid `cwd` surfaces an error and the command is not started.
   - File and folder paths support absolute paths, `~` expansion, and paths relative to the first workspace folder. Invalid paths surface an error and do not break other items.
   - With `typeAndPath: "url:https://example.com"` and no `icon`, the item initially shows `$(globe)`, then updates to the site favicon when available.

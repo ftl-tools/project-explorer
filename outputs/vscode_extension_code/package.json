@@ -2,7 +2,7 @@
   "name": "ftl-project-explorer",
   "displayName": "FTL Project Explorer",
   "description": "A VSCode extension that helps developers navigate and manage their projects more effectively",
-  "version": "0.1.96",
+  "version": "0.1.97",
   "publisher": "ftl-tools",
   "license": "MIT",
   "repository": {
