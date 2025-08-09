@@ -1,6 +1,6 @@
 # Project Explorer
 
-The project explorer is a [VSCode extension](/design_docs/vscode_extensions.md) that helps developers navigate and manage their projects more effectively. The extension is developed by team `ftl-tools` and has id `project-explorer`. The extension is released under the MIT license, it's repository field is this repository. The code for the extension can be found in the `outputs/vscode_extension_code/` folder. This document outlines the major parts of the extension and how they work together.
+The project explorer is a [VSCode extension](/design_docs/vscode_extensions.md) that helps developers navigate and manage their projects more effectively. The extension is developed by team `ftl-tools` and has id `ftl-project-explorer`. The extension is released under the MIT license, it's repository field is this repository. The code for the extension can be found in the `outputs/vscode_extension_code/` folder. This document outlines the major parts of the extension and how they work together.
 
 ## Project Explorer Views
 
@@ -19,7 +19,7 @@ We want to add a tree view named "Project Explorer" to the file explorer panel i
 
 The Project Explorer title bar shows actions on the right. These provide quick access to common actions:
 
-- **Open Brainstorming Doc**: If the [brainstormingDocPath](#brainstorming-document-path) setting is defined, then show this action icon. It uses the [lightbulb icon](/design_docs/tree_view_renderer/lightbulb.light_mode.svg). Tapping on this icon should open in the editor the file at the path defined in the settings. The tool tip should say "Brainstorming". This should react to changes in the setting immediately. That is to say that if the [brainstormingDocPath](#brainstorming-document-path) changes even after the extension is loaded, the icon should appear or disappear accordingly, and always open the correct file.
+- **Open Brainstorming Doc**: If the [brainstormingDocPath](#brainstorming-document-path) setting is defined, then show this action icon. It uses the [lightbulb icon](/design_docs/lightbulb.light_mode.png). Tapping on this icon should open in the editor the file at the path defined in the settings. The tool tip should say "Brainstorming". This should react to changes in the setting immediately. That is to say that if the [brainstormingDocPath](#brainstorming-document-path) changes even after the extension is loaded, the icon should appear or disappear accordingly, and always open the correct file.
 
   - The extension should watch a vscode workspace setting named `brainstormingDocPath` that points to the brainstorming document for the project.
   <details>

@@ -34,5 +34,5 @@ Below is an overview of the design docs for this project. Please refer to these 
 **[Project Explorer](/design_docs/project_explorer.md)**: The project explorer is a [VSCode extension](/design_docs/vscode_extensions.md) that helps developers navigate and manage their projects more effectively. The extension is developed by team `ftl-tools` and has id `project-explorer`. The extension is released under the MIT license. For now we'll leave the repository blank. The code for the extension can be found in the `outputs/vscode_extension_code/` folder. This document outlines the major parts of the extension and how they work together.
 
 - **[VSCode Extensions](/design_docs/vscode_extensions.md)**: VSCode extensions add extra functionality to the Visual Studio Code editor. This document provides what we think are a good set of defaults and patterns to follow when building VSCode extensions.
-- **[lightbulb.dark_mode.svg](/design_docs/lightbulb.dark_mode.svg)**
-- **[lightbulb.light_mode.svg](/design_docs/lightbulb.light_mode.svg)**
+- **[lightbulb.dark_mode.png](/design_docs/lightbulb.dark_mode.png)**
+- **[lightbulb.light_mode.png](/design_docs/lightbulb.light_mode.png)**

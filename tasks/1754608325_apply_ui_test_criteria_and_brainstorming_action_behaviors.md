@@ -8,4 +8,4 @@ This task applies the latest design-doc updates to the Project Explorer extensio
 
 Notes and implications to watch:
 
-- The docs reference a custom lightbulb icon at /design_docs/tree_view_renderer/lightbulb.light_mode.svg. We currently use the built-in codicon `$(light-bulb)`, which satisfies the "lightbulb icon" requirement without bundling assets. No change needed unless the design later requires a custom SVG asset in the extension package.
+- The docs reference a custom lightbulb icon at /design_docs/lightbulb.light_mode.png. We currently use the built-in codicon `$(light-bulb)`, which satisfies the "lightbulb icon" requirement without bundling assets. No change needed unless the design later requires a custom image asset in the extension package.
