@@ -1,6 +1,6 @@
 # Project Explorer
 
-**Latest Build:** [Project Explorer 0.1.97](./ftl-project-explorer-0.1.97.vsix)
+**Latest Build:** [Project Explorer 0.1.99](./ftl-project-explorer-0.1.99.vsix)
 
 A Visual Studio Code extension by ftl-tools that adds a Project Explorer view to the Explorer sidebar. It lets you pin files, folders, and URLs into a custom tree, open a brainstorming document from the title bar, and quickly access the extension’s settings. This README explains what it does, how to use it, and how to configure it.
 

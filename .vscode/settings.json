@@ -4,9 +4,16 @@
   "project-explorer.brainstormingDocPath": "brainstorming.md",
   "project-explorer.treeItems": [
     {
+      "id": "publish",
+      "label": "Publish",
+      "typeAndPath": "script:npm run build && npm run publish",
+      "cwd": "outputs/vscode_extension_code"
+    },
+    {
       "id": "build",
       "label": "Build",
-      "typeAndPath": "script:npm run build --prefix='outputs/vscode_extension_code'"
+      "typeAndPath": "script:npm run build",
+      "cwd": "outputs/vscode_extension_code"
     },
     {
       "icon": "$(globe)",
