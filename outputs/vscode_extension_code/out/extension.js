@@ -65,6 +65,19 @@ function activate(context) {
             vscode.window.showErrorMessage(`Unable to open URL: ${msg}`);
         }
     }));
+    context.subscriptions.push(vscode.commands.registerCommand('projectExplorer.openHelp', async () => {
+        const id = context.extension.id;
+        let opened = false;
+        try {
+            opened = await vscode.env.openExternal(vscode.Uri.parse(`vscode:extension/${id}`));
+        }
+        catch {
+            opened = false;
+        }
+        if (!opened) {
+            await vscode.commands.executeCommand('workbench.extensions.search', `@id:${id}`);
+        }
+    }));
     context.subscriptions.push(vscode.commands.registerCommand('projectExplorer.openSettings', async () => {
         const hasWs = (vscode.workspace.workspaceFolders?.length || 0) > 0;
         if (hasWs) {

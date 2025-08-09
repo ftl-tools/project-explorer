@@ -19,6 +19,19 @@ We want to add a tree view named "Project Explorer" to the file explorer panel i
 
 The Project Explorer title bar shows actions on the right. These provide quick access to common actions:
 
+- **Help**: Always visible and appears first. Uses the [help icon](/design_docs/help.light_mode.svg). Tooltip: "Help". Clicking opens this extension’s overview page in the Extensions view so users can read the README.
+  - Implementation notes: Determine this extension’s identifier from `publisher.name` in its `package.json` and open the Extensions view directly to that extension’s details page. If direct navigation is unavailable, fall back to opening the Extensions view filtered to the extension id so the details page is shown.
+  <details>
+  <summary>Test that</summary>
+
+  - The "Help" title action is always visible on the `projectExplorer` view and is the left-most action among navigation actions.
+  - It shows the help icon and tooltip "Help".
+  - Invoking it opens the Extensions view focused on this extension’s details page, displaying the README.
+
+  [How to Test](/design_docs/vscode_extensions.md#testing)
+
+  </details><br>
+
 - **Open Brainstorming Doc**: If the [brainstormingDocPath](#brainstorming-document-path) setting is defined, then show this action icon. It uses the [lightbulb icon](/design_docs/lightbulb.light_mode.png). Tapping on this icon should open in the editor the file at the path defined in the settings. The tool tip should say "Brainstorming". This should react to changes in the setting immediately. That is to say that if the [brainstormingDocPath](#brainstorming-document-path) changes even after the extension is loaded, the icon should appear or disappear accordingly, and always open the correct file.
 
   - The extension should watch a vscode workspace setting named `brainstormingDocPath` that points to the brainstorming document for the project.
@@ -65,7 +78,7 @@ The Project Explorer title bar shows actions on the right. These provide quick a
 <details>
 <summary>Test that</summary>
 
-- The actions icons appear in the Project Explorer view title bar in the order above.
+- The action icons appear in the Project Explorer view title bar in this order: Help, Brainstorming (when visible), Settings, Collapse All.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
