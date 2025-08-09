@@ -2,7 +2,7 @@
   "name": "ftl-project-explorer",
   "displayName": "FTL Project Explorer",
   "description": "A VSCode extension that helps developers navigate and manage their projects more effectively",
-  "version": "0.1.54",
+  "version": "0.1.95",
   "publisher": "ftl-tools",
   "license": "MIT",
   "repository": {
@@ -76,8 +76,8 @@
         "title": "Help",
         "category": "Project Explorer",
         "icon": {
-          "light": "resources/icons/help.light_mode.svg",
-          "dark": "resources/icons/help.dark_mode.svg"
+          "light": "resources/icons/help.light_mode.png",
+          "dark": "resources/icons/help.dark_mode.png"
         }
       },
       {
@@ -142,7 +142,6 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
     "publish": "vsce publish",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",

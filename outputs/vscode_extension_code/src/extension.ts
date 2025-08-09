@@ -79,15 +79,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand('projectExplorer.openHelp', async () => {
             const id = context.extension.id;
-            let opened = false;
-            try {
-                opened = await vscode.env.openExternal(vscode.Uri.parse(`vscode:extension/${id}`));
-            } catch {
-                opened = false;
-            }
-            if (!opened) {
-                await vscode.commands.executeCommand('workbench.extensions.search', `@id:${id}`);
-            }
+            const uri = vscode.Uri.parse(`vscode:extension/${id}`);
+            await vscode.commands.executeCommand('vscode.open', uri);
         })
     );
 

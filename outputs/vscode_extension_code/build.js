@@ -63,12 +63,13 @@ function createVSIX(version) {
     try {
         // Prefer local vsce to avoid npx restrictions; fallback to npx
         try {
-            execSync('node ./node_modules/@vscode/vsce/vsce package', { stdio: 'inherit', cwd: __dirname });
+            execSync('node ./node_modules/@vscode/vsce/vsce package', { stdio: 'inherit', cwd: __dirname, env: { ...process.env, SKIP_VSCODE_PREPUBLISH: '1' } });
         } catch (_) {
-            execSync('npx @vscode/vsce package', { stdio: 'inherit', cwd: __dirname });
+            execSync('npx @vscode/vsce package', { stdio: 'inherit', cwd: __dirname, env: { ...process.env, SKIP_VSCODE_PREPUBLISH: '1' } });
         }
 
-        const vsixName = `project-explorer-${version}.vsix`;
+        const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8'));
+        const vsixName = `${pkg.name}-${version}.vsix`;
         const src = path.join(__dirname, vsixName);
         const repoRoot = path.join(__dirname, '..', '..');
         const dest = path.join(repoRoot, vsixName);
@@ -123,7 +124,7 @@ function removeOldVSIX(currentVersion) {
     const cleanDir = (dir) => {
         const files = fs.readdirSync(dir);
         files.forEach(file => {
-            if (file.startsWith('project-explorer-') && file.endsWith('.vsix')) {
+            if (file.endsWith('.vsix')) {
                 if (!file.includes(currentVersion)) {
                     fs.unlinkSync(path.join(dir, file));
                     console.log(`Removed old VSIX from ${dir}: ${file}`);

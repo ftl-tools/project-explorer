@@ -4,7 +4,7 @@
 
 - [ ] Add a new Help title action as the first action in the Project Explorer view title bar. See: design_docs/project_explorer.md#title-action-icons
   - [x] Contribute a command `projectExplorer.openHelp` with:
-    - [x] Icon: resources/icons/help.light_mode.svg (light), resources/icons/help.dark_mode.svg (dark)
+    - [x] Icon: resources/icons/help.light_mode.png (light), resources/icons/help.dark_mode.png (dark)
     - [x] Title: "Help"
     - [x] Category: "Project Explorer"
   - [x] Add a `view/title` menu entry for `projectExplorer.openHelp` with `when: view == projectExplorer` and group `navigation@05` so it appears first. Tooltip should be "Help".

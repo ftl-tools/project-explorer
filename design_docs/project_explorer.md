@@ -19,7 +19,8 @@ We want to add a tree view named "Project Explorer" to the file explorer panel i
 
 The Project Explorer title bar shows actions on the right. These provide quick access to common actions:
 
-- **Help**: Always visible and appears first. Uses the [help icon](/design_docs/help.light_mode.svg). Tooltip: "Help". Clicking opens this extension’s overview page in the Extensions view so users can read the README.
+- **Help**: Always visible and appears first. Uses the [help icon](/design_docs/help.light_mode.png). Tooltip: "Help". Clicking opens this extension’s overview page in the Extensions view so users can read the README.
+
   - Implementation notes: Determine this extension’s identifier from `publisher.name` in its `package.json` and open the Extensions view directly to that extension’s details page. If direct navigation is unavailable, fall back to opening the Extensions view filtered to the extension id so the details page is shown.
   <details>
   <summary>Test that</summary>
