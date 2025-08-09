@@ -17,6 +17,12 @@
 - [x] Publish the extension to the VSCode marketplace
 - [x] Add the help action icon (show the extension readme in the marketplace)
 
+## Script Type Items
+
+- [ ] Add script items to the tree view.
+  - The config for script type items looks like `"typeAndPath": "script:bash script --flags"`. Script items have vscode's run icon by default, cannot have children, and tapping on them runs the script headlessly. Append an `...` to the label while the script is running, and prevent it from being run again until it finishes.
+- [ ] Support configuring working directory and environment for script items.
+
 ## Doc Items
 
 - [ ] Add the doc watching paths to the workspace config

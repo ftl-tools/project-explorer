@@ -77,6 +77,12 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
+        vscode.commands.registerCommand('projectExplorer.runScript', async (id: string) => {
+            await provider.runScriptById(id);
+        })
+    );
+
+    context.subscriptions.push(
         vscode.commands.registerCommand('projectExplorer.openHelp', async () => {
             const id = context.extension.id;
             const uri = vscode.Uri.parse(`vscode:extension/${id}`);

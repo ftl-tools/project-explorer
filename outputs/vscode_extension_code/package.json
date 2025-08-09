@@ -2,7 +2,7 @@
   "name": "ftl-project-explorer",
   "displayName": "FTL Project Explorer",
   "description": "A VSCode extension that helps developers navigate and manage their projects more effectively",
-  "version": "0.1.95",
+  "version": "0.1.96",
   "publisher": "ftl-tools",
   "license": "MIT",
   "repository": {
@@ -51,7 +51,7 @@
               },
               "typeAndPath": {
                 "type": "string",
-                "markdownDescription": "One of `file:path/to/file`, `folder:path/to/folder`, or `url:https://...`."
+                "markdownDescription": "One of `file:path/to/file`, `folder:path/to/folder`, `url:https://...`, or `script:<command and args>` (runs headlessly)."
               },
               "icon": {
                 "type": "string",
@@ -64,6 +64,17 @@
               "parentId": {
                 "type": "string",
                 "markdownDescription": "Optional parent item id for nesting."
+              },
+              "cwd": {
+                "type": "string",
+                "markdownDescription": "For `script:` items only. Working directory. Supports absolute paths, `~`, or path relative to the first workspace folder."
+              },
+              "env": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "markdownDescription": "For `script:` items only. Environment variables to add/override for the script process."
               }
             }
           }

@@ -1,4 +1,18 @@
 {
   "cSpell.words": [""],
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "project-explorer.brainstormingDocPath": "brainstorming.md",
+  "project-explorer.treeItems": [
+    {
+      "icon": "$(globe)",
+      "id": "quickLinks",
+      "label": "Quick Links"
+    },
+    {
+      "id": "opencodeDocs",
+      "label": "OpenCode Docs",
+      "typeAndPath": "url:https://opencode.ai/docs/",
+      "parentId": "quickLinks"
+    }
+  ]
 }

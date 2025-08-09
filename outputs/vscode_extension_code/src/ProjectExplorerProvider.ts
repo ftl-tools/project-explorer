@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as https from 'https';
 import * as http from 'http';
+import { spawn } from 'child_process';
 
 class FaviconCache {
     private cacheDir: string;
@@ -170,6 +171,9 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
 
     private favicons: FaviconCache;
 
+    private running: Set<string> = new Set();
+    private scriptIds: Set<string> = new Set();
+
     constructor(context: vscode.ExtensionContext) {
         this.favicons = new FaviconCache(context);
         vscode.workspace.onDidChangeConfiguration(e => {
@@ -204,6 +208,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         this.parentById.clear();
         this.childrenById.clear();
         this.roots = [];
+        this.scriptIds.clear();
 
         const arr = Array.isArray(raw) ? raw : [];
         if (!Array.isArray(raw)) warnings.add('`project-explorer.treeItems` is not an array. Ignoring.');
@@ -215,9 +220,11 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             icon?: unknown;
             label?: unknown;
             parentId?: unknown;
+            cwd?: unknown;
+            env?: unknown;
         };
 
-        type ValidItem = { id: string; type?: 'file' | 'folder' | 'url'; target?: string; icon?: string; label: string; parentId?: string; };
+        type ValidItem = { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string; cwd?: string; env?: Record<string, string> };
         const valid: Array<ValidItem> = [];
 
         for (const entry of arr as UserItem[]) {
@@ -239,7 +246,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             const labelRaw = typeof entry.label === 'string' && entry.label.trim() ? entry.label.trim() : undefined;
             const icon = typeof entry.icon === 'string' && entry.icon.trim() ? entry.icon.trim() : undefined;
 
-            let type: 'file' | 'folder' | 'url' | undefined;
+            let type: 'file' | 'folder' | 'url' | 'script' | undefined;
             let target: string | undefined;
 
             const newRaw = (entry as any).typeAndPath;
@@ -251,9 +258,9 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             if (tpp) {
                 const colon = tpp.indexOf(':');
                 if (colon > 0 && colon < tpp.length - 1) {
-                    const t = tpp.slice(0, colon) as 'file' | 'folder' | 'url';
+                    const t = tpp.slice(0, colon) as 'file' | 'folder' | 'url' | 'script';
                     const tgt = tpp.slice(colon + 1);
-                    if (['file', 'folder', 'url'].includes(t)) {
+                    if (['file', 'folder', 'url', 'script'].includes(t)) {
                         type = t;
                         target = tgt;
                     } else {
@@ -276,8 +283,10 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
                         } catch {
                             label = target;
                         }
-                    } else {
+                    } else if (type === 'file' || type === 'folder') {
                         label = path.basename(this.resolveFsPath(target));
+                    } else if (type === 'script') {
+                        label = target;
                     }
                 } else {
                     // No type/target and no label provided; fall back to id
@@ -285,7 +294,23 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
                 }
             }
 
-            valid.push({ id, type, target, label, icon, parentId });
+            const v: ValidItem = { id, type, target, label: label!, icon, parentId };
+            if (type === 'script') {
+                const cwd = typeof (entry as any).cwd === 'string' && (entry as any).cwd.trim() ? (entry as any).cwd.trim() : undefined;
+                const envRaw = (entry as any).env;
+                let env: Record<string, string> | undefined;
+                if (envRaw && typeof envRaw === 'object' && !Array.isArray(envRaw)) {
+                    env = {};
+                    for (const [k, val] of Object.entries(envRaw as Record<string, unknown>)) {
+                        if (typeof val === 'string') env[k] = val;
+                    }
+                }
+                v.cwd = cwd;
+                v.env = env;
+                this.scriptIds.add(id);
+            }
+
+            valid.push(v);
         }
 
         // Build nodes
@@ -293,6 +318,14 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             const node = this.makeNode(v);
             this.items.set(v.id, node);
             this.parentById.set(v.id, v.parentId);
+        }
+
+        // Enforce: children cannot have script parent
+        for (const [id, pid] of Array.from(this.parentById.entries())) {
+            if (pid && this.scriptIds.has(pid)) {
+                warnings.add(`Item '${id}' cannot have script parent '${pid}'. Rendering as top-level.`);
+                this.parentById.set(id, undefined);
+            }
         }
 
         // Detect cycles
@@ -334,7 +367,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             const hasChildren = (this.childrenById.get(id) || []).length > 0;
             node.collapsibleState = hasChildren ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
             // For label-only items without explicit icon, use folder icon to hint grouping
-            if (!node.command && !node.iconPath) {
+            if (!node.command && !node.iconPath && !('script' in node)) {
                 node.iconPath = new vscode.ThemeIcon('folder');
             }
         }
@@ -345,7 +378,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         }
     }
 
-    private makeNode(v: { id: string; type?: 'file' | 'folder' | 'url'; target?: string; icon?: string; label: string; parentId?: string; }): ProjectExplorerItem {
+    private makeNode(v: { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string; cwd?: string; env?: Record<string, string>; }): ProjectExplorerItem {
         const { id } = v;
         const type = v.type;
         const target = v.target;
@@ -366,9 +399,11 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             }
         } else if (type === 'url') {
             iconPath = new vscode.ThemeIcon('globe');
+        } else if (type === 'script') {
+            iconPath = new vscode.ThemeIcon('run');
         }
 
-        const node = new ProjectExplorerItem(label, vscode.TreeItemCollapsibleState.None);
+        const node = new ProjectExplorerItem(label, vscode.TreeItemCollapsibleState.None) as ProjectExplorerItem & { script?: { cmd: string; cwd?: string; env?: Record<string, string> } };
         node.id = id;
         node.tooltip = tooltip;
         node.iconPath = iconPath;
@@ -394,9 +429,49 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
                     }
                 }).catch(() => {/*ignore*/});
             }
+        } else if (type === 'script' && target) {
+            node.script = { cmd: target, cwd: v.cwd, env: v.env };
+            node.command = { command: 'projectExplorer.runScript', title: 'Run Script', arguments: [id] };
         }
 
         return node;
+    }
+
+    async runScriptById(id: string): Promise<void> {
+        const node = this.items.get(id) as (ProjectExplorerItem & { script?: { cmd: string; cwd?: string; env?: Record<string, string> } }) | undefined;
+        if (!node || !node.script) return;
+        if (this.running.has(id)) return; // already running
+
+        const originalLabel = node.label as string;
+        this.running.add(id);
+        node.command = undefined; // disable while running
+        node.label = `${originalLabel}...`;
+        this._onDidChangeTreeData.fire(node);
+
+        const cwd = node.script.cwd ? this.resolveFsPath(node.script.cwd) : undefined;
+        if (cwd && !fs.existsSync(cwd)) {
+            vscode.window.showErrorMessage(`Invalid cwd for script '${id}': ${cwd}`);
+            // restore state
+            this.running.delete(id);
+            node.label = originalLabel;
+            node.command = { command: 'projectExplorer.runScript', title: 'Run Script', arguments: [id] };
+            this._onDidChangeTreeData.fire(node);
+            return;
+        }
+
+        const env = { ...process.env, ...(node.script.env || {}) } as NodeJS.ProcessEnv;
+        const child = spawn(node.script.cmd, { shell: true, cwd, env });
+        child.on('error', err => {
+            vscode.window.showErrorMessage(`Failed to start script '${id}': ${err instanceof Error ? err.message : String(err)}`);
+        });
+        const done = () => {
+            this.running.delete(id);
+            node.label = originalLabel;
+            node.command = { command: 'projectExplorer.runScript', title: 'Run Script', arguments: [id] };
+            this._onDidChangeTreeData.fire(node);
+        };
+        child.on('exit', () => done());
+        child.on('close', () => done());
     }
 
     private parseCodicon(s: string): string | null {

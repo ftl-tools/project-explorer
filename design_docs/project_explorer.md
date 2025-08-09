@@ -131,20 +131,24 @@ Let's break these down in detail:
   - `file:path/to/file.txt`: When tapped open the file in the editor. When no icon is specified, use the default icon for this file type.
   - `folder:path/to/folder`: When tapped open the folder in the explorer. When no icon is specified, use the default icon for this file type.
   - `url:https://example.com`: When tapped open the URL in an external browser. When no icon is specified, attempt to fetch and use the site’s favicon; while loading show the VS Code globe codicon (`$(globe)`), and if favicon fetching fails, keep using the globe.
+  - `script:<command and args>`: When tapped run the command headlessly using the system shell. Script items have the VS Code run codicon (`$(run)`) by default, cannot have children, and are disabled while running. While running, append `...` to the label. Optional `cwd` and `env` fields control working directory and environment variables.
 
   <details>
   <summary>Test that</summary>
 
-  - `typeAndPath` supports the forms `file:...`, `folder:...`, and `url:https://...`. Missing `:` separators, empty paths, or unknown types result in the item being ignored with a surfaced validation error while other valid items still render.
+  - `typeAndPath` supports the forms `file:...`, `folder:...`, `url:https://...`, and `script:<command>`. Missing `:` separators, empty paths, or unknown types result in the item being ignored with a surfaced validation error while other valid items still render.
   - Clicking a `file:` item opens the target file in the editor; if the file does not exist, an error is shown and no editor is opened. When `icon` is omitted, the file’s default icon (from the current icon theme) is used.
   - Clicking a `folder:` item reveals the folder in the VS Code Explorer if it exists; if it does not exist, an error is shown and no action is taken. When `icon` is omitted, the default folder icon is used.
   - Clicking a `url:` item opens the URL in the system browser. When `icon` is omitted, the VS Code globe codicon is used.
+  - Clicking a `script:` item runs the command in a headless background task. When `icon` is omitted, the run codicon is used. While running, the item is disabled and its label appends `...`; upon completion, the label reverts and the item is re-enabled. Only one run per item may be active at a time.
+  - For `script:` items, `cwd` sets the process working directory (supports absolute paths, `~`, and paths relative to the first workspace folder); `env` adds/overrides environment variables for the process. Invalid `cwd` surfaces an error and the command is not started.
   - File and folder paths support absolute paths, `~` expansion, and paths relative to the first workspace folder. Invalid paths surface an error and do not break other items.
   - With `typeAndPath: "url:https://example.com"` and no `icon`, the item initially shows `$(globe)`, then updates to the site favicon when available.
   - Sites with a valid `/favicon.ico` display that icon. If missing, but HTML contains `<link rel="icon" ...>`, that icon is used.
   - When no favicon can be resolved or fetch fails (timeout, non-HTTP(S) scheme), the globe remains.
   - Cached favicons persist across window reloads; subsequent openings do not re-fetch within the 7-day TTL. Negative results are not retried within 24 hours.
   - While the favicon is being fetched, the tree remains responsive; selection state is preserved when the icon updates.
+  - Items cannot use a `script:` item as their `parentId`; such children are treated as top-level with a warning.
 
   [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -223,7 +227,7 @@ Add these settings in `contributes.configuration` so they appear in the Settings
               },
               "typeAndPath": {
                 "type": "string",
-                "markdownDescription": "One of `file:path/to/file`, `folder:path/to/folder`, or `url:https://...`."
+                "markdownDescription": "One of `file:path/to/file`, `folder:path/to/folder`, `url:https://...`, or `script:<command and args>` (runs headlessly)."
               },
               "icon": {
                 "type": "string",
@@ -236,6 +240,15 @@ Add these settings in `contributes.configuration` so they appear in the Settings
               "parentId": {
                 "type": "string",
                 "markdownDescription": "Optional parent item id for nesting."
+              },
+              "cwd": {
+                "type": "string",
+                "markdownDescription": "For `script:` items only. Working directory. Supports absolute paths, `~`, or path relative to the first workspace folder."
+              },
+              "env": {
+                "type": "object",
+                "additionalProperties": { "type": "string" },
+                "markdownDescription": "For `script:` items only. Environment variables to add/override for the script process."
               }
             }
           }
@@ -258,7 +271,7 @@ Add these settings in `contributes.configuration` so they appear in the Settings
 
 - The settings `project-explorer.treeItems` and `project-explorer.brainstormingDocPath` are visible under the extension in the Settings UI.
 - `project-explorer.treeItems` shows an “Edit in settings.json” affordance; clicking it opens the Workspace settings JSON when a workspace is open and the User settings JSON otherwise.
-- While editing the JSON, IntelliSense offers `id`, `typeAndPath`, `icon`, `label`, and `parentId` for array entries as defined by the schema.
+- While editing the JSON, IntelliSense offers `id`, `typeAndPath`, `icon`, `label`, `parentId`, `cwd`, and `env` for array entries as defined by the schema.
 - Invoking “Project Explorer: Configure Tree Items…” reveals the `project-explorer.treeItems` setting in the Settings UI; no JSON files are opened directly.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
@@ -284,9 +297,12 @@ Add these settings in `contributes.configuration` so they appear in the Settings
       "label": "Repository"
     },
     {
-      "id": "scripts",
-      "typeAndPath": "folder:scripts",
-      "parentId": "readme"
+      "id": "build-app",
+      "typeAndPath": "script:npm run build",
+      "icon": "$(run)",
+      "label": "Build App",
+      "cwd": "~",
+      "env": { "NODE_ENV": "production", "API_URL": "https://api.example.com" }
     }
   ]
 }
