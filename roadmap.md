@@ -19,17 +19,23 @@
 
 ## Script Type Items
 
-- [ ] Add script items to the tree view.
+- [x] Support configuring working directory and environment for script items, and add script items to the tree view.
   - The config for script type items looks like `"typeAndPath": "script:bash script --flags"`. Script items have vscode's run icon by default, cannot have children, and tapping on them runs the script headlessly. Append an `...` to the label while the script is running, and prevent it from being run again until it finishes.
-- [ ] Support configuring working directory and environment for script items.
 
 ## Doc Items
 
+- [ ] Update the architecture to parse files and settings, write them to a cache json file, have a tree builder watch that file and then write a tree view json file, and then watch that tree view file and render it in the project explorer.
 - [ ] Add the doc watching paths to the workspace config
-- [ ] See if we can easily add a graphic interface for watched paths
 - [ ] Add the docs watcher and parser, and test that it saves a json, detects changes, and re-writes the json (no vscode dependencies)
-- [ ] Add the tree builder and test that it builds a tree view, detects changes, and re-builds (no vscode dependencies)
+- [ ] See if we can easily add a graphic interface for watched paths
+- [ ] Add the doc tree builder logic and test that it builds a tree view, detects changes, and re-builds (no vscode dependencies)
   - _Note:_ Every doc should have a unique id. This way we can add custom tree items that are children of discovered tree items. We might even be able to use this id to look up components, pages, stores, etc... in future if we have a clear way to id them.
 - [ ] Render the tree view in the project explorer view and test that it renders, detects changes, and re-renders
-- [ ] Publish an update to the VSCode marketplace with the new features
 - [ ] Test out configuring docs in a sample workspace
+- [ ] Publish an update to the VSCode marketplace with the new features
+
+## Doc Editor
+
+- [ ] Go back through my research and remember which text editor I though would work the best. I want a clean UI, markdown shortcuts, a way to preview git diffs, and perhaps a way to add comments or any other nice features.
+- [ ] Define a new extension in a new design doc that replaces the default md editor with the new doc editor.
+- [ ] Add a setting to the project explorer to open docs in the default editor or preview.

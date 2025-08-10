@@ -1,5 +1,18 @@
 # Brainstorming
 
+- New apply flow:
+  - Diff the design docs.
+  - Identify any new concepts in the added docs or removed concepts in the removed docs.
+  - In parallel:
+    - Go through any existing docs that might be related, and add links to the new concepts.
+    - Go through the added docs and add links to any existing concepts that are related.
+  - Add and update all "Test that" sections in the added docs.
+  - Add and update all "Implementation approach" sections in the added docs.
+  - Identify all design changes.
+  - Make a checklist.
+  - Implement the changes.
+  - Test the changes and fix as needed.
+  - Make a build and commit.
 - Use the tree item hierarchy to figure out how to break up large python files in to smaller more reasonable ones.
 - Add an "Explorer Brainstorming" item to the top of the tree that opens a markdown file in the editor for the whole team to dump ideas for the explorer into. This file should live in docs somewhere.
 - Top Level tree items could be something like?
