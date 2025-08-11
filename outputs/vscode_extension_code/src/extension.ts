@@ -1,8 +1,20 @@
 import * as vscode from 'vscode';
 import { ProjectExplorerProvider } from './ProjectExplorerProvider';
 
-export function activate(context: vscode.ExtensionContext) {
+import { activateParser } from './parser';
+import { activateBuilder } from './builder';
+
+export async function activate(context: vscode.ExtensionContext) {
     const provider = new ProjectExplorerProvider(context);
+
+    // Ensure workspace .vscode/project_explorer exists and start parser/builder
+    const ws = vscode.workspace.workspaceFolders?.[0];
+    if (ws) {
+        const dir = vscode.Uri.joinPath(ws.uri, '.vscode', 'project_explorer');
+        await vscode.workspace.fs.createDirectory(dir);
+    }
+    const parser = activateParser(context);
+    const builder = activateBuilder(context);
 
     vscode.window.registerTreeDataProvider('projectExplorer', provider);
 

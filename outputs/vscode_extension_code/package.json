@@ -2,7 +2,7 @@
   "name": "ftl-project-explorer",
   "displayName": "FTL Project Explorer",
   "description": "A VSCode extension that helps developers navigate and manage their projects more effectively",
-  "version": "0.1.99",
+  "version": "0.1.102",
   "publisher": "ftl-tools",
   "license": "MIT",
   "repository": {
@@ -45,6 +45,36 @@
               "id"
             ],
             "properties": {
+              "project-explorer.watchThese": {
+                "type": "array",
+                "scope": "resource",
+                "default": [],
+                "markdownDescription": "Watch paths for parsers. Each entry: { type: 'docs' | 'userDefined', path: 'path/from/workspace' }.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "type",
+                    "path"
+                  ],
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "docs",
+                        "userDefined"
+                      ]
+                    },
+                    "path": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "project-explorer.openDocsInPreview": {
+                "type": "boolean",
+                "default": true,
+                "markdownDescription": "Open doc items in Markdown Preview when true (default)."
+              },
               "id": {
                 "type": "string",
                 "markdownDescription": "Unique identifier for the item. Must be unique across all items."

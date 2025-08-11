@@ -165,6 +165,8 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
     readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
     private items: Map<string, ProjectExplorerItem> = new Map();
+    private treeFileUri: vscode.Uri | null = null;
+    private watcher: vscode.FileSystemWatcher | null = null;
     private parentById: Map<string, string | undefined> = new Map();
     private childrenById: Map<string, string[]> = new Map();
     private roots: string[] = [];
@@ -176,6 +178,15 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
 
     constructor(context: vscode.ExtensionContext) {
         this.favicons = new FaviconCache(context);
+        const ws = vscode.workspace.workspaceFolders?.[0];
+        if (ws) {
+            this.treeFileUri = vscode.Uri.joinPath(ws.uri, '.vscode', 'project_explorer', 'tree_items.json');
+            const pattern = new vscode.RelativePattern(ws, '.vscode/project_explorer/tree_items.json');
+            this.watcher = vscode.workspace.createFileSystemWatcher(pattern);
+            this.watcher.onDidChange(() => this.refresh());
+            this.watcher.onDidCreate(() => this.refresh());
+        }
+
         vscode.workspace.onDidChangeConfiguration(e => {
             if (e.affectsConfiguration('project-explorer.treeItems') || e.affectsConfiguration('project-explorer')) {
                 this.refresh();
@@ -201,8 +212,6 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
 
     private rebuild() {
         const warnings = new Set<string>();
-        const cfg = vscode.workspace.getConfiguration('project-explorer');
-        const raw = cfg.get<unknown>('treeItems');
 
         this.items.clear();
         this.parentById.clear();
@@ -210,8 +219,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         this.roots = [];
         this.scriptIds.clear();
 
-        const arr = Array.isArray(raw) ? raw : [];
-        if (!Array.isArray(raw)) warnings.add('`project-explorer.treeItems` is not an array. Ignoring.');
+        const arr = this.readTreeItemsFromFile();
 
         type UserItem = {
             id?: unknown;
@@ -224,15 +232,16 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             env?: unknown;
         };
 
-        type ValidItem = { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string; cwd?: string; env?: Record<string, string> };
+        type ValidItem = { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string | null; cwd?: string; env?: Record<string, string> };
         const valid: Array<ValidItem> = [];
 
-        for (const entry of arr as UserItem[]) {
+        for (const entry of arr as any[]) {
             if (!entry || typeof entry !== 'object') {
                 warnings.add('Ignored non-object entry in `project-explorer.treeItems`.');
                 continue;
             }
             const id = typeof entry.id === 'string' && entry.id.trim() ? entry.id.trim() : '';
+            const typeAndPath = typeof (entry as any).typeAndPath === 'string' ? (entry as any).typeAndPath : undefined;
             if (!id) {
                 warnings.add('Ignored item with missing `id`.');
                 continue;
@@ -249,7 +258,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             let type: 'file' | 'folder' | 'url' | 'script' | undefined;
             let target: string | undefined;
 
-            const newRaw = (entry as any).typeAndPath;
+            const newRaw = typeAndPath;
             const oldRaw = (entry as any).type_plus_path;
             const tpp = typeof newRaw === 'string' && newRaw.trim() ? newRaw.trim() : (typeof oldRaw === 'string' && oldRaw.trim() ? oldRaw.trim() : '');
             if (!tpp && typeof oldRaw === 'string' && oldRaw.trim()) {
@@ -294,7 +303,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
                 }
             }
 
-            const v: ValidItem = { id, type, target, label: label!, icon, parentId };
+            const v: ValidItem = { id, type, target, label: label!, icon, parentId: parentId ?? undefined };
             if (type === 'script') {
                 const cwd = typeof (entry as any).cwd === 'string' && (entry as any).cwd.trim() ? (entry as any).cwd.trim() : undefined;
                 const envRaw = (entry as any).env;
@@ -317,7 +326,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         for (const v of valid) {
             const node = this.makeNode(v);
             this.items.set(v.id, node);
-            this.parentById.set(v.id, v.parentId);
+            this.parentById.set(v.id, v.parentId || undefined);
         }
 
         // Enforce: children cannot have script parent
@@ -378,7 +387,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         }
     }
 
-    private makeNode(v: { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string; cwd?: string; env?: Record<string, string>; }): ProjectExplorerItem {
+    private makeNode(v: { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string | null; cwd?: string; env?: Record<string, string>; }): ProjectExplorerItem {
         const { id } = v;
         const type = v.type;
         const target = v.target;
@@ -491,6 +500,20 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         child.on('close', (code: number | null) => {
             finish(code === 0);
         });
+    }
+
+    private readTreeItemsFromFile(): any[] {
+        try {
+            if (this.treeFileUri) {
+                const p = this.treeFileUri.fsPath;
+                if (fs.existsSync(p)) {
+                    const txt = fs.readFileSync(p, 'utf8');
+                    const arr = JSON.parse(txt);
+                    return Array.isArray(arr) ? arr : [];
+                }
+            }
+        } catch {}
+        return [];
     }
 
     private parseCodicon(s: string): string | null {
