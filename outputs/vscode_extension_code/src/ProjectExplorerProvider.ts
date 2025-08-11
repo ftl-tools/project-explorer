@@ -420,7 +420,18 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         // command behavior
         if (type === 'file' && target) {
             const uri = vscode.Uri.file(this.resolveFsPath(target));
-            node.command = { command: 'vscode.open', title: 'Open File', arguments: [uri] };
+            const isMd = uri.fsPath.toLowerCase().endsWith('.md');
+            if (isMd) {
+                const cfg = vscode.workspace.getConfiguration('project-explorer');
+                const openInPreview = cfg.get<boolean>('openDocsInPreview', true);
+                if (openInPreview) {
+                    node.command = { command: 'markdown.showPreview', title: 'Open Preview', arguments: [uri] } as any;
+                } else {
+                    node.command = { command: 'vscode.open', title: 'Open File', arguments: [uri] };
+                }
+            } else {
+                node.command = { command: 'vscode.open', title: 'Open File', arguments: [uri] };
+            }
         } else if (type === 'folder' && target) {
             const uri = vscode.Uri.file(this.resolveFsPath(target));
             node.command = { command: 'revealInExplorer', title: 'Reveal in Explorer', arguments: [uri] } as any;

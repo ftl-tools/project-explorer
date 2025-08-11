@@ -28,13 +28,18 @@
   "contributes": {
     "configuration": {
       "title": "Project Explorer",
-      "properties": {
-        "project-explorer.brainstormingDocPath": {
-          "type": "string",
-          "scope": "resource",
-          "markdownDescription": "Absolute path, `~` expansion, or path relative to the first workspace folder pointing to your brainstorming document."
-        },
-        "project-explorer.treeItems": {
+"properties": {
+          "project-explorer.brainstormingDocPath": {
+            "type": "string",
+            "scope": "resource",
+            "markdownDescription": "Absolute path, `~` expansion, or path relative to the first workspace folder pointing to your brainstorming document."
+          },
+          "project-explorer.openDocsInPreview": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Open Markdown docs in Markdown Preview when true (default)."
+          },
+          "project-explorer.treeItems": {
           "type": "array",
           "scope": "resource",
           "default": [],
@@ -70,11 +75,7 @@
                   }
                 }
               },
-              "project-explorer.openDocsInPreview": {
-                "type": "boolean",
-                "default": true,
-                "markdownDescription": "Open doc items in Markdown Preview when true (default)."
-              },
+              
               "id": {
                 "type": "string",
                 "markdownDescription": "Unique identifier for the item. Must be unique across all items."
