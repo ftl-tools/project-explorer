@@ -419,19 +419,24 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
 
         // command behavior
         if (type === 'file' && target) {
-            const uri = vscode.Uri.file(this.resolveFsPath(target));
-            const isMd = uri.fsPath.toLowerCase().endsWith('.md');
+            const fsPath = this.resolveFsPath(target);
+            const uri = vscode.Uri.file(fsPath);
+            const isMd = fsPath.toLowerCase().endsWith('.md');
+            if (isMd && !v.icon) {
+                // Use extension-bundled theme icons for docs
+                const lightFile = vscode.Uri.file(path.join(__dirname, '..', 'resources', 'icons', 'doc.light_mode.png'));
+                const darkFile = vscode.Uri.file(path.join(__dirname, '..', 'resources', 'icons', 'doc.dark_mode.png'));
+                node.iconPath = { light: lightFile, dark: darkFile } as any;
+            }
             if (isMd) {
                 const cfg = vscode.workspace.getConfiguration('project-explorer');
                 const openInPreview = cfg.get<boolean>('openDocsInPreview', true);
-                if (openInPreview) {
-                    node.command = { command: 'markdown.showPreview', title: 'Open Preview', arguments: [uri] } as any;
-                } else {
-                    node.command = { command: 'vscode.open', title: 'Open File', arguments: [uri] };
-                }
+                if (openInPreview) node.command = { command: 'markdown.showPreview', title: 'Open Preview', arguments: [uri] } as any;
+                else node.command = { command: 'vscode.open', title: 'Open File', arguments: [uri] };
             } else {
                 node.command = { command: 'vscode.open', title: 'Open File', arguments: [uri] };
             }
+
         } else if (type === 'folder' && target) {
             const uri = vscode.Uri.file(this.resolveFsPath(target));
             node.command = { command: 'revealInExplorer', title: 'Reveal in Explorer', arguments: [uri] } as any;
