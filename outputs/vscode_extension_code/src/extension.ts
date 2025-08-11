@@ -18,10 +18,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
     vscode.window.registerTreeDataProvider('projectExplorer', provider);
 
-    // Watch for theme changes to update icons
-    vscode.window.onDidChangeActiveColorTheme(() => {
-        provider.refresh();
-    });
+    // Watch for theme changes to update icons immediately
+    const themeSub = vscode.window.onDidChangeActiveColorTheme(() => provider.refresh());
+    context.subscriptions.push(themeSub);
 
     const updateBrainstormingContext = () => {
         const cfg = vscode.workspace.getConfiguration('project-explorer');

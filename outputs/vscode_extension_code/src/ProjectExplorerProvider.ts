@@ -424,9 +424,11 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             const isMd = fsPath.toLowerCase().endsWith('.md');
             if (isMd && !v.icon) {
                 // Use extension-bundled theme icons for docs
-                const lightFile = vscode.Uri.file(path.join(__dirname, '..', 'resources', 'icons', 'doc.light_mode.png'));
-                const darkFile = vscode.Uri.file(path.join(__dirname, '..', 'resources', 'icons', 'doc.dark_mode.png'));
-                node.iconPath = { light: lightFile, dark: darkFile } as any;
+                const base = path.join(__dirname, '..', 'resources', 'icons');
+                node.iconPath = {
+                    light: vscode.Uri.file(path.join(base, 'doc.light_mode.png')),
+                    dark: vscode.Uri.file(path.join(base, 'doc.dark_mode.png')),
+                } as any;
             }
             if (isMd) {
                 const cfg = vscode.workspace.getConfiguration('project-explorer');
