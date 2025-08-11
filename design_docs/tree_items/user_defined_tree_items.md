@@ -21,7 +21,9 @@ These items are defined as a list of [tree item objects](/design_docs/tree_items
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- Adding, editing, and removing items in userDefinedTreeItems reflects in the tree without reload; order matches settings.
+- Invalid item shapes are ignored with a clear warning and do not crash the extension; valid items still render.
+- Settings schema validation highlights errors in the Settings UI where possible.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -48,7 +50,9 @@ The parser should just read the [user-defined tree items settings](#settings) an
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- The parser_output.json includes a userDefined array mirroring the settings order and content (for valid items).
+- Changes in the settings update only the userDefined section and preserve other sections; removing an item removes it from the array.
+- Malformed items are omitted with warnings; output remains valid JSON.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -61,7 +65,9 @@ The tree builder for user-defined tree items should just read the [user-defined 
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- All valid user-defined items are copied into tree_items.json unchanged, preserving order; invalid items are skipped with warnings.
+- Parent-child relationships defined by parentId are realized correctly in the rendered tree; missing parents do not crash the builder.
+- Duplicate ids across user-defined and other sources are reported and resolved per id rules without breaking the tree.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 

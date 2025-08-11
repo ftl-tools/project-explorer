@@ -5,7 +5,8 @@ The Project Explorer title bar shows actions on the right. These provide quick a
 <details>
 <summary>Test that</summary>
 
-- The action icons appear in the Project Explorer view title bar in the order below.
+- The action icons appear in the Project Explorer view title bar in the order: Help, Brainstorming (when configured), Settings, Collapse All.
+- Icons use correct light/dark variants and update on theme change without reload.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -20,7 +21,9 @@ Implementation notes: Determine this extension’s identifier from `publisher.na
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- The Help icon is visible as the leftmost title action and uses the provided help icon assets in light/dark themes.
+- Tooltip reads "Help" and clicking opens the extension’s details page; if deep link fails, the Extensions view opens filtered to the extension id showing details.
+- Command does not change active editor or leave dirty files; errors display a non-blocking notification.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -35,7 +38,10 @@ The extension should watch a vscode workspace setting named `brainstormingDocPat
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- When brainstormingDocPath is unset, the lightbulb action is hidden; when set to a valid file, it appears with tooltip "Brainstorming".
+- Clicking the lightbulb opens the configured file in an editor; updating the setting at runtime switches the target without reload.
+- If the setting points to a missing file, clicking shows a non-blocking error notification and does not create a file; relative vs absolute paths resolve from workspace root.
+- Icon reacts to theme changes; command is disabled if no workspace is open and path is relative.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -48,7 +54,10 @@ Always visible. Uses the built-in gear codicon (`$(gear)`). Tooltip: "Project Ex
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- The Settings action is always visible with gear codicon and tooltip "Project Explorer Settings".
+- With a workspace open, clicking opens the Settings UI to Workspace scope filtered by @ext:ftl-tools.project-explorer; with no workspace, opens User settings and shows an info notification about workspace settings.
+- Settings open in the Settings UI, never JSON; command leaves current editors untouched and does not change files unintentionally.
+- Filtering shows only this extension’s settings; toggling a setting reflects in behavior immediately where applicable.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -61,7 +70,9 @@ Uses the built-in collapse-all codicon (`$(collapse-all)`). Tooltip: "Collapse A
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- The Collapse All action is visible with the correct codicon and tooltip.
+- Expanding multiple nodes then invoking the action collapses only the Project Explorer view nodes and does not focus or open any editors.
+- Invoking via command palette has the same effect and does not affect other views’ trees.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 

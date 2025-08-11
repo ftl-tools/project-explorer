@@ -21,6 +21,17 @@ Automate builds using a script that does the following steps:
 5. Updates [README.md](/README.md) with the latest build version like `**Latest Build:** [Project Explorer x.x.x](logical-project-explorer-x.x.x.vsix)`.
 6. Removes any old VSIX packages.
 
+<details>
+<summary>Test that</summary>
+
+- Build script bumps version, runs type check/lint, bundles, and outputs a single VSIX in repo root; old VSIX files are removed.
+- README latest build link updates to the new version and file name.
+- Build fails early with a clear error if type check/lint fails; no VSIX is produced.
+
+[How to Test](#testing)
+
+</details><br>
+
 ### Testing
 
 #### UI Tests

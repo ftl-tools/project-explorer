@@ -5,7 +5,11 @@ The project explorer is a [VSCode extension](/design_docs/vscode_extensions.md) 
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- The extension identifier is ftl-tools.project-explorer and the view appears in the Explorer panel titled "Project Explorer" on activation.
+- The extension README opens from the marketplace entry; repository points to this repo; license is MIT.
+- Enabling/disabling the extension shows/hides the view without errors; no orphaned commands or views remain.
+- Activation creates the .vscode/project_explorer folder if missing without prompting; deactivation disposes file watchers.
+- Switching color theme does not break icons or view rendering.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -29,7 +33,10 @@ The [project explorer view](#project-explorer-view) will have a few title action
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- The four title actions render in this order: Help, Brainstorming (only when configured), Settings, Collapse All.
+- Tooltips match: "Help", "Brainstorming", "Project Explorer Settings", "Collapse All".
+- Toggling brainstormingDocPath at runtime adds/removes the Brainstorming action without reload; other actions persist.
+- Actions use correct icons in light/dark themes and update on theme change without reload.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -80,7 +87,11 @@ Changes to the settings or to any watched files or folders should immediately tr
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- The file .vscode/project_explorer/parser_output.json is created on activation and contains top-level sections per tree item type.
+- Editing a watched file or adding/removing files updates only the affected section while preserving other sections; unchanged sections keep their content and order.
+- Changing watch settings at runtime updates watches and causes a re-parse reflecting new/removed paths; removing a watch path prunes only that section.
+- Output shape matches each item type spec and remains valid JSON under rapid edits; partial writes never leave corrupt JSON (last valid is preserved if needed).
+- File permission errors or missing paths are logged with non-blocking warnings; parser continues processing remaining paths.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -113,7 +124,10 @@ Changes to the parser's output json file should be detected immediately, and tri
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- The file .vscode/project_explorer/tree_items.json is generated from parser_output.json and is a flat array of tree item objects.
+- Updating only one section in parser_output.json yields minimal corresponding updates in tree_items.json (no unrelated churn or reordering).
+- Invalid or missing sections fail gracefully: builder logs an error and keeps the last valid tree_items.json.
+- On malformed parser_output.json, builder waits for a valid file rather than emitting corrupt output.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -131,7 +145,10 @@ To create the tree content for this tree view, we watch the output file from the
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- Items render in the same order as in tree_items.json and update live when the file changes; expansion/selection state is preserved for unchanged ids.
+- Adding/removing items in tree_items.json appears/disappears without reload; unrelated nodes keep their expansion state.
+- Clicking different typeAndPath items routes to the expected default behaviors defined in the tree items spec.
+- Icons react to theme changes immediately; broken icon paths fall back per spec without breaking rendering.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 

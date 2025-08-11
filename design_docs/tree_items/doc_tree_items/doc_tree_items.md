@@ -16,7 +16,9 @@ Users can add zero or more doc watch paths to the [watch path settings](/design_
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- Adding/removing a docs watch path at runtime updates watches and triggers parsing without reload.
+- Both folder and single-file paths are accepted; invalid paths are ignored with a warning and do not crash the parser.
+- Relative paths resolve from the workspace root; if no workspace is open, the setting is ignored with an info message.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -55,7 +57,10 @@ Lets break these properties down:
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- parser_output.json contains a docs object keyed by each configured search path, each entry with path, type, title, and children.
+- Markdown files: first level-1 header is captured as title; no level-1 header yields empty title; non-markdown entries have empty title.
+- Non-Markdown files are typed as resource; directories are typed as folder; recursion discovers nested items.
+- Parser ignores hidden/system folders like .git and node_modules by default unless explicitly included.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -78,7 +83,10 @@ We want a [tree item builder](/design_docs/project_explorer.md#tree-builder) tha
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- Regular folder without special doc produces a folder item with correct id, typeAndPath, icon, label, and parentId.
+- Folder containing README.md or a doc matching the folder basename suppresses the folder item and promotes that doc as the node; siblings become children of the doc.
+- Case-insensitive README.md matching is honored; nested README files only affect their own folder.
+- If both README.md and basename.md exist, prefer README.md as the promoted doc.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -95,7 +103,9 @@ We want a [tree item builder](/design_docs/project_explorer.md#tree-builder) tha
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- id is filename without extension; typeAndPath starts with file: and points to the doc; icon uses the doc asset with theme variants.
+- Label prefers first H1; if absent, Title Case of filename without extension; empty or whitespace H1 is treated as absent.
+- ParentId reflects folder structure or special promotion rule from the folders section.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -112,7 +122,9 @@ We want a [tree item builder](/design_docs/project_explorer.md#tree-builder) tha
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- id equals filename with extension; label is Title Case without extension; icon is VS Code default for the file’s extension.
+- Non-markdown files under docs folders are included as resources and appear under their containing doc/folder per structure.
+- Large binary resources do not block parsing; metadata is recorded without reading full file contents.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -125,7 +137,9 @@ There should be an optional vscode setting called `openDocsInPreview` if this is
 <details>
 <summary>Test that</summary>
 
-- TODO...
+- With openDocsInPreview unset or true, clicking a doc opens Markdown Preview; with false, opens the markdown text editor.
+- Toggling the setting at runtime changes the behavior for subsequent clicks without reload.
+- Preview opens beside existing editor when appropriate and does not steal focus unexpectedly.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 

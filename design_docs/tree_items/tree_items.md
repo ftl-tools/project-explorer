@@ -31,7 +31,9 @@ Let's break these down in detail:
   <details>
   <summary>Test that</summary>
 
-  - TODO...
+  - IDs are unique across all items in tree_items.json; duplicates are rejected or de-duplicated deterministically with a clear warning.
+  - IDs remain stable between rebuilds when inputs are unchanged, preserving expansion and selection state.
+  - Changing only labels or icons does not change ids; changing path/type may change ids per generator rules.
 
   [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -48,7 +50,10 @@ Let's break these down in detail:
   <details>
   <summary>Test that</summary>
 
-  - TODO...
+  - file: opens the file in the editor; default icon matches VS Code file icon when no custom icon is set; missing file shows error and does not create it.
+  - folder: reveals the folder in the Explorer without opening an editor; default icon is the folder icon; missing folder shows warning.
+  - url: opens in default external browser; shows globe while fetching favicon; if fetch fails or is slow, globe remains and UI stays responsive.
+  - script: runs command headlessly; shows $(run) icon; disables item while running and appends "..." to label; shows output on success and error pop-up on failure; prevents concurrent runs per item; respects cwd and env when provided; long-running scripts can be triggered again only after completion.
 
   [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -64,7 +69,10 @@ Let's break these down in detail:
   <details>
   <summary>Test that</summary>
 
-  - TODO...
+  - All icon sources render: local workspace files, built-in codicons, extension resources by id, and remote SVGs.
+  - When remote icon fails or returns non-SVG, item falls back to the type’s default icon without breaking rendering.
+  - Light/dark theme variants are respected for extension-provided icons and update immediately on theme change.
+  - Invalid icon spec (unknown scheme) is ignored with a warning and default icon is used.
 
   [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -75,7 +83,9 @@ Let's break these down in detail:
   <details>
   <summary>Test that</summary>
 
-  - TODO...
+  - When label is provided, it is displayed verbatim; when omitted, label is derived from path basename in Title Case without extension.
+  - Title casing follows the documented rules (including numerics and separators) from the name casing spec.
+  - Empty or whitespace-only labels are treated as missing and derived from the path.
 
   [How to Test](/design_docs/vscode_extensions.md#testing)
 
@@ -85,7 +95,9 @@ Let's break these down in detail:
   <details>
   <summary>Test that</summary>
 
-  - TODO...
+  - Items with parentId appear nested under the correct parent; items without parentId appear at the root.
+  - Missing or invalid parentId is handled gracefully (item becomes top-level or is skipped) without breaking the tree; a warning is logged.
+  - Cycles in parent relationships are detected and broken deterministically to avoid infinite loops.
 
   [How to Test](/design_docs/vscode_extensions.md#testing)
 
