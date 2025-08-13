@@ -2,7 +2,7 @@
   "name": "ftl-project-explorer",
   "displayName": "FTL Project Explorer",
   "description": "A VSCode extension that helps developers navigate and manage their projects more effectively",
-  "version": "0.1.102",
+  "version": "0.2.1",
   "publisher": "ftl-tools",
   "license": "MIT",
   "repository": {
@@ -22,24 +22,29 @@
     "onCommand:projectExplorer.openBrainstormingDoc",
     "onCommand:projectExplorer.openSettings",
     "onCommand:projectExplorer.configureTreeItems",
-    "onCommand:projectExplorer.collapseAll"
+    "onCommand:projectExplorer.collapseAll",
+    "onCommand:projectExplorer.showInExplorer",
+    "onCommand:projectExplorer.openInBrowser",
+    "onCommand:projectExplorer.runScript",
+    "onCommand:projectExplorer.openDocInPreview",
+    "onCommand:projectExplorer.openDocInEditor"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "configuration": {
       "title": "Project Explorer",
-"properties": {
-          "project-explorer.brainstormingDocPath": {
-            "type": "string",
-            "scope": "resource",
-            "markdownDescription": "Absolute path, `~` expansion, or path relative to the first workspace folder pointing to your brainstorming document."
-          },
-          "project-explorer.openDocsInPreview": {
-            "type": "boolean",
-            "default": true,
-            "markdownDescription": "Open Markdown docs in Markdown Preview when true (default)."
-          },
-          "project-explorer.treeItems": {
+      "properties": {
+        "project-explorer.brainstormingDocPath": {
+          "type": "string",
+          "scope": "resource",
+          "markdownDescription": "Absolute path, `~` expansion, or path relative to the first workspace folder pointing to your brainstorming document."
+        },
+        "project-explorer.openDocsInPreview": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Open Markdown docs in Markdown Preview when true (default)."
+        },
+        "project-explorer.treeItems": {
           "type": "array",
           "scope": "resource",
           "default": [],
@@ -50,32 +55,6 @@
               "id"
             ],
             "properties": {
-              "project-explorer.watchThese": {
-                "type": "array",
-                "scope": "resource",
-                "default": [],
-                "markdownDescription": "Watch paths for parsers. Each entry: { type: 'docs' | 'userDefined', path: 'path/from/workspace' }.",
-                "items": {
-                  "type": "object",
-                  "required": [
-                    "type",
-                    "path"
-                  ],
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "enum": [
-                        "docs",
-                        "userDefined"
-                      ]
-                    },
-                    "path": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              
               "id": {
                 "type": "string",
                 "markdownDescription": "Unique identifier for the item. Must be unique across all items."
@@ -106,6 +85,31 @@
                   "type": "string"
                 },
                 "markdownDescription": "For `script:` items only. Environment variables to add/override for the script process."
+              }
+            }
+          }
+        },
+        "project-explorer.watchThese": {
+          "type": "array",
+          "scope": "resource",
+          "default": [],
+          "markdownDescription": "Watch paths for parsers. Each entry: { type: 'docs' | 'userDefined', path: 'path/from/workspace' }.",
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "path"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "docs",
+                  "userDefined"
+                ]
+              },
+              "path": {
+                "type": "string"
               }
             }
           }
@@ -147,6 +151,31 @@
         "title": "Collapse All",
         "category": "Project Explorer",
         "icon": "$(collapse-all)"
+      },
+      {
+        "command": "projectExplorer.showInExplorer",
+        "title": "Show in Editor's File Explorer",
+        "category": "Project Explorer"
+      },
+      {
+        "command": "projectExplorer.openInBrowser",
+        "title": "Open in Browser",
+        "category": "Project Explorer"
+      },
+      {
+        "command": "projectExplorer.runScript",
+        "title": "Run",
+        "category": "Project Explorer"
+      },
+      {
+        "command": "projectExplorer.openDocInPreview",
+        "title": "Open in Preview",
+        "category": "Project Explorer"
+      },
+      {
+        "command": "projectExplorer.openDocInEditor",
+        "title": "Open in Editor",
+        "category": "Project Explorer"
       }
     ],
     "menus": {
@@ -171,6 +200,38 @@
           "when": "view == projectExplorer",
           "group": "navigation@30"
         }
+      ],
+      "view/item/context": [
+        {
+          "command": "projectExplorer.showInExplorer",
+          "when": "view == projectExplorer && (viewItem == projectExplorer.file || viewItem == projectExplorer.folder)",
+          "group": "projectExplorer@1"
+        },
+        {
+          "command": "projectExplorer.openInBrowser",
+          "when": "view == projectExplorer && viewItem == projectExplorer.url",
+          "group": "projectExplorer@1"
+        },
+        {
+          "command": "projectExplorer.runScript",
+          "when": "view == projectExplorer && viewItem == projectExplorer.script",
+          "group": "projectExplorer@1"
+        },
+        {
+          "command": "projectExplorer.showInExplorer",
+          "when": "view == projectExplorer && viewItem == projectExplorer.doc",
+          "group": "projectExplorer@1"
+        },
+        {
+          "command": "projectExplorer.openDocInPreview",
+          "when": "view == projectExplorer && viewItem == projectExplorer.doc",
+          "group": "projectExplorer@2"
+        },
+        {
+          "command": "projectExplorer.openDocInEditor",
+          "when": "view == projectExplorer && viewItem == projectExplorer.doc",
+          "group": "projectExplorer@3"
+        }
       ]
     },
     "views": {
@@ -189,8 +250,10 @@
     "watch": "tsc -watch -p ./",
     "build": "node build.js",
     "lint": "eslint src --ext ts",
-    "test": "echo \"No tests specified\"",
-    "test:ui": "extest setup-and-run --workspace tests/ui/workspace --tests out/test/ui --disable-extensions",
+    "test": "npm run test:compile && npm run test:ui",
+    "test:compile": "tsc -p ./ && tsc tests/ui/suite/*.ts --outDir out/test/ui --module commonjs --target ES2020 --lib ES2020,DOM --esModuleInterop --resolveJsonModule --skipLibCheck",
+    "test:ui": "extest setup-and-run out/test/ui/*.test.js",
+    "test:unit": "npm run compile && mocha tests/unit/*.test.js",
     "test:ui:headed": "extest setup-and-run --workspace tests/ui/workspace --tests out/test/ui --disable-extensions --headless=false"
   },
   "devDependencies": {
@@ -206,6 +269,10 @@
     "selenium-webdriver": "^4.23.0",
     "mocha": "^10.2.0",
     "@types/mocha": "^10.0.1",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "glob": "^8.1.0",
+    "@types/glob": "^8.1.0",
+    "chai": "^4.3.7",
+    "@types/chai": "^4.3.4"
   }
 }

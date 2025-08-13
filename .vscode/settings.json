@@ -26,5 +26,12 @@
       "typeAndPath": "url:https://opencode.ai/docs/",
       "parentId": "quickLinks"
     }
-  ]
+  ],
+  "project-explorer.watchThese": [
+    {
+      "type": "docs",
+      "path": "design_docs"
+    }
+  ],
+  "project-explorer.openDocsInPreview": true
 }

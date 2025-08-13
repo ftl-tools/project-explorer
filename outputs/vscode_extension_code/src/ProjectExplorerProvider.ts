@@ -199,6 +199,32 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         this._onDidChangeTreeData.fire();
     }
 
+    retheme(): void {
+        const base = path.join(__dirname, '..', 'resources', 'icons');
+        for (const [id, node] of this.items) {
+            // Update all projectExplorer themed icons to ensure they reflect the new theme
+            const iconPath = node.iconPath;
+            if (iconPath && typeof iconPath === 'object' && 'light' in iconPath && 'dark' in iconPath) {
+                // Check if this is a projectExplorer icon by looking at the file paths
+                const lightPath = String(iconPath.light);
+                const darkPath = String(iconPath.dark);
+                if (lightPath.includes('resources/icons') && darkPath.includes('resources/icons')) {
+                    // This is a projectExplorer themed icon - refresh it to ensure proper theme updating
+                    // Extract the icon ID from the path
+                    const lightMatch = lightPath.match(/([^/\\]+)\.light_mode\.(png|svg)$/);
+                    if (lightMatch) {
+                        const iconId = lightMatch[1];
+                        const themed = this.resolveProjectExplorerIcon(iconId);
+                        if (themed) {
+                            node.iconPath = themed as any;
+                        }
+                    }
+                }
+            }
+        }
+        this._onDidChangeTreeData.fire();
+    }
+
     getTreeItem(element: ProjectExplorerItem): vscode.TreeItem {
         return element;
     }
@@ -230,9 +256,10 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
             parentId?: unknown;
             cwd?: unknown;
             env?: unknown;
+            additionalContextMenuItems?: unknown;
         };
 
-        type ValidItem = { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string | null; cwd?: string; env?: Record<string, string> };
+        type ValidItem = { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string | null; cwd?: string; env?: Record<string, string>; additionalContextMenuItems?: Record<string, string> };
         const valid: Array<ValidItem> = [];
 
         for (const entry of arr as any[]) {
@@ -319,6 +346,20 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
                 this.scriptIds.add(id);
             }
 
+            // Parse additionalContextMenuItems for any item type
+            const additionalMenuRaw = (entry as any).additionalContextMenuItems;
+            if (additionalMenuRaw && typeof additionalMenuRaw === 'object' && !Array.isArray(additionalMenuRaw)) {
+                const additionalContextMenuItems: Record<string, string> = {};
+                for (const [menuLabel, command] of Object.entries(additionalMenuRaw as Record<string, unknown>)) {
+                    if (typeof command === 'string' && command.trim()) {
+                        additionalContextMenuItems[menuLabel] = command.trim();
+                    }
+                }
+                if (Object.keys(additionalContextMenuItems).length > 0) {
+                    v.additionalContextMenuItems = additionalContextMenuItems;
+                }
+            }
+
             valid.push(v);
         }
 
@@ -375,10 +416,6 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         for (const [id, node] of this.items) {
             const hasChildren = (this.childrenById.get(id) || []).length > 0;
             node.collapsibleState = hasChildren ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
-            // For label-only items without explicit icon, use folder icon to hint grouping
-            if (!node.command && !node.iconPath && !('script' in node)) {
-                node.iconPath = new vscode.ThemeIcon('folder');
-            }
         }
 
         // Surface warnings (non-blocking)
@@ -387,7 +424,7 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         }
     }
 
-    private makeNode(v: { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string | null; cwd?: string; env?: Record<string, string>; }): ProjectExplorerItem {
+    private makeNode(v: { id: string; type?: 'file' | 'folder' | 'url' | 'script'; target?: string; icon?: string; label: string; parentId?: string | null; cwd?: string; env?: Record<string, string>; additionalContextMenuItems?: Record<string, string>; }): ProjectExplorerItem {
         const { id } = v;
         const type = v.type;
         const target = v.target;
@@ -397,11 +434,32 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         if (type && target) tooltip.appendText(`${type}:${target}`); else tooltip.appendText(label);
         tooltip.isTrusted = true;
 
-        // icon resolution
+        // icon resolution (preliminary; Markdown overrides to themed pair below)
         if (v.icon) {
             const codicon = this.parseCodicon(v.icon);
-            if (codicon) iconPath = new vscode.ThemeIcon(codicon);
-            else {
+            if (codicon) {
+                iconPath = new vscode.ThemeIcon(codicon);
+            } else if (v.icon.startsWith('projectExplorer:')) {
+                const iconId = v.icon.substring('projectExplorer:'.length);
+                const themed = this.resolveProjectExplorerIcon(iconId);
+                if (themed) iconPath = themed as any;
+                else vscode.window.showWarningMessage(`Project Explorer icon not found: ${iconId}. Falling back to default icon.`);
+            } else if (v.icon.startsWith('local:')) {
+                const localPath = v.icon.substring('local:'.length);
+                const p = this.resolveFsPath(localPath);
+                if (fs.existsSync(p)) iconPath = vscode.Uri.file(p);
+                else vscode.window.showWarningMessage(`Local icon not found for item '${id}': ${localPath}. Falling back to default icon.`);
+            } else if (v.icon.startsWith('vscode:')) {
+                const vscodeIcon = v.icon.substring('vscode:'.length);
+                iconPath = new vscode.ThemeIcon(vscodeIcon);
+            } else if (v.icon.startsWith('remote:')) {
+                const remoteUrl = v.icon.substring('remote:'.length);
+                // For remote SVGs, we'll try to fetch them asynchronously
+                this.fetchRemoteIcon(remoteUrl, id).catch(() => {
+                    // Ignore errors, will fall back to default icon
+                });
+            } else {
+                // Legacy behavior - treat as file path
                 const p = this.resolveFsPath(v.icon);
                 if (fs.existsSync(p)) iconPath = vscode.Uri.file(p);
                 else vscode.window.showWarningMessage(`Icon path not found for item '${id}': ${v.icon}. Falling back to default icon.`);
@@ -416,19 +474,35 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         node.id = id;
         node.tooltip = tooltip;
         node.iconPath = iconPath;
-
+        
         // command behavior
         if (type === 'file' && target) {
             const fsPath = this.resolveFsPath(target);
             const uri = vscode.Uri.file(fsPath);
             const isMd = fsPath.toLowerCase().endsWith('.md');
-            if (isMd && !v.icon) {
-                // Use extension-bundled theme icons for docs
-                const base = path.join(__dirname, '..', 'resources', 'icons');
-                node.iconPath = {
-                    light: vscode.Uri.file(path.join(base, 'doc.light_mode.png')),
-                    dark: vscode.Uri.file(path.join(base, 'doc.dark_mode.png')),
-                } as any;
+
+            // Set contextValue for context menus based on file type
+            node.contextValue = isMd ? 'projectExplorer.doc' : 'projectExplorer.file';
+            
+            // Set default file icon if no custom icon was specified
+            if (!iconPath) {
+                node.iconPath = uri;
+            }
+            
+            if (isMd) {
+                // Only override icon for markdown files if they have a projectExplorer icon set
+                // This allows resource markdown files to use VSCode's default markdown icon
+                if (v.icon && v.icon.startsWith('projectExplorer:')) {
+                    // Icon was already set above in the icon resolution section
+                } else if (v.icon) {
+                    // User provided a custom icon, try to resolve themed pair
+                    const useCodicon = this.parseCodicon(v.icon);
+                    if (!useCodicon) {
+                        const themed = this.resolveThemedPair(v.icon);
+                        if (themed) node.iconPath = themed as any;
+                    }
+                }
+                // If no custom icon is set, let VSCode use its default markdown icon
             }
             if (isMd) {
                 const cfg = vscode.workspace.getConfiguration('project-explorer');
@@ -442,8 +516,16 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         } else if (type === 'folder' && target) {
             const uri = vscode.Uri.file(this.resolveFsPath(target));
             node.command = { command: 'revealInExplorer', title: 'Reveal in Explorer', arguments: [uri] } as any;
+            // Set default folder icon if no custom icon was specified
+            if (!iconPath) {
+                node.iconPath = new vscode.ThemeIcon('folder');
+            }
+            // Set contextValue for folders
+            node.contextValue = 'projectExplorer.folder';
         } else if (type === 'url' && target) {
             node.command = { command: 'projectExplorer.openExternal', title: 'Open in Browser', arguments: [target] };
+            // Set contextValue for URLs
+            node.contextValue = 'projectExplorer.url';
             // Attempt async favicon resolution when user hasn't set a custom icon
             if (!v.icon) {
                 this.favicons.getIconForUrl(target).then(uri => {
@@ -459,6 +541,18 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
         } else if (type === 'script' && target) {
             node.script = { cmd: target, cwd: v.cwd, env: v.env };
             node.command = { command: 'projectExplorer.runScript', title: 'Run Script', arguments: [id] };
+            // Set contextValue for scripts
+            node.contextValue = 'projectExplorer.script';
+        }
+
+        // Set default folder icon for label-only items (grouping containers) if no custom icon was specified
+        if (!type && !iconPath) {
+            node.iconPath = new vscode.ThemeIcon('folder');
+        }
+
+        // Store additional context menu items on the node for later retrieval
+        if (v.additionalContextMenuItems) {
+            (node as any).additionalContextMenuItems = v.additionalContextMenuItems;
         }
 
         return node;
@@ -537,6 +631,50 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
     private parseCodicon(s: string): string | null {
         const m = /^\$\(([^)]+)\)$/.exec(s.trim());
         return m ? m[1] : null;
+    }
+
+    private resolveThemedPair(input?: string): { light: vscode.Uri; dark: vscode.Uri } | null {
+        // If user gave an image path, try to infer .light_mode/.dark_mode siblings; else null
+        if (!input) return null;
+        const p = this.resolveFsPath(input);
+        const baseDir = path.dirname(p);
+        const file = path.basename(p);
+        const m = /(.*?)(\.(light_mode|dark_mode))?(\.[a-zA-Z0-9]+)$/.exec(file);
+        if (!m) return null;
+        const stem = m[1];
+        const ext = m[4];
+        const light = path.join(baseDir, `${stem}.light_mode${ext}`);
+        const dark = path.join(baseDir, `${stem}.dark_mode${ext}`);
+        if (fs.existsSync(light) && fs.existsSync(dark)) {
+            return { light: vscode.Uri.file(light), dark: vscode.Uri.file(dark) };
+        }
+        return null;
+    }
+
+    private resolveProjectExplorerIcon(iconId: string): { light: vscode.Uri; dark: vscode.Uri } | null {
+        const base = path.join(__dirname, '..', 'resources', 'icons');
+        const light = path.join(base, `${iconId}.light_mode.png`);
+        const dark = path.join(base, `${iconId}.dark_mode.png`);
+        if (fs.existsSync(light) && fs.existsSync(dark)) {
+            return { light: vscode.Uri.file(light), dark: vscode.Uri.file(dark) };
+        }
+        return null;
+    }
+
+    private async fetchRemoteIcon(url: string, itemId: string): Promise<void> {
+        try {
+            // Use the existing favicon fetching infrastructure but for any remote icon
+            const uri = await this.favicons.getIconForUrl(url);
+            if (uri) {
+                const node = this.items.get(itemId);
+                if (node) {
+                    node.iconPath = uri;
+                    this._onDidChangeTreeData.fire(node);
+                }
+            }
+        } catch (error) {
+            // Silently ignore errors for remote icon fetching
+        }
     }
 
     private resolveFsPath(p: string): string {

@@ -1,0 +1,148 @@
+{
+  "userDefined": [
+    {
+      "id": "publish",
+      "label": "Publish",
+      "typeAndPath": "script:npm run build && npm run publish",
+      "cwd": "outputs/vscode_extension_code"
+    },
+    {
+      "id": "build",
+      "label": "Build",
+      "typeAndPath": "script:npm run build",
+      "cwd": "outputs/vscode_extension_code"
+    },
+    {
+      "icon": "$(globe)",
+      "id": "quickLinks",
+      "label": "Quick Links"
+    },
+    {
+      "id": "opencodeDocs",
+      "label": "OpenCode Docs",
+      "typeAndPath": "url:https://opencode.ai/docs/",
+      "parentId": "quickLinks"
+    }
+  ],
+  "docs": {
+    "design_docs": {
+      "path": "design_docs",
+      "type": "folder",
+      "title": "",
+      "children": [
+        {
+          "path": "design_docs/development_plan.md",
+          "type": "doc",
+          "title": "Development Plan",
+          "children": []
+        },
+        {
+          "path": "design_docs/project_explorer.md",
+          "type": "doc",
+          "title": "Project Explorer",
+          "children": []
+        },
+        {
+          "path": "design_docs/title_action_icons",
+          "type": "folder",
+          "title": "",
+          "children": [
+            {
+              "path": "design_docs/title_action_icons/help.dark_mode.png",
+              "type": "resource",
+              "title": "",
+              "children": []
+            },
+            {
+              "path": "design_docs/title_action_icons/help.light_mode.png",
+              "type": "resource",
+              "title": "",
+              "children": []
+            },
+            {
+              "path": "design_docs/title_action_icons/lightbulb.dark_mode.png",
+              "type": "resource",
+              "title": "",
+              "children": []
+            },
+            {
+              "path": "design_docs/title_action_icons/lightbulb.light_mode.png",
+              "type": "resource",
+              "title": "",
+              "children": []
+            },
+            {
+              "path": "design_docs/title_action_icons/title_action_icons.md",
+              "type": "doc",
+              "title": "Title Action Icons",
+              "children": []
+            }
+          ]
+        },
+        {
+          "path": "design_docs/tree_items",
+          "type": "folder",
+          "title": "",
+          "children": [
+            {
+              "path": "design_docs/tree_items/doc_tree_items",
+              "type": "folder",
+              "title": "",
+              "children": [
+                {
+                  "path": "design_docs/tree_items/doc_tree_items/doc.dark_mode.png",
+                  "type": "resource",
+                  "title": "",
+                  "children": []
+                },
+                {
+                  "path": "design_docs/tree_items/doc_tree_items/doc.light_mode.png",
+                  "type": "resource",
+                  "title": "",
+                  "children": []
+                },
+                {
+                  "path": "design_docs/tree_items/doc_tree_items/doc_tree_items.md",
+                  "type": "doc",
+                  "title": "Doc Tree Items",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "path": "design_docs/tree_items/tree_items.md",
+              "type": "doc",
+              "title": "Tree Items",
+              "children": []
+            },
+            {
+              "path": "design_docs/tree_items/user_defined_tree_items.md",
+              "type": "doc",
+              "title": "User-Defined Tree Items",
+              "children": []
+            }
+          ]
+        },
+        {
+          "path": "design_docs/utils",
+          "type": "folder",
+          "title": "",
+          "children": [
+            {
+              "path": "design_docs/utils/name_casing.md",
+              "type": "doc",
+              "title": "Name Casing",
+              "children": []
+            }
+          ]
+        },
+        {
+          "path": "design_docs/vscode_extensions.md",
+          "type": "doc",
+          "title": "VSCode Extensions",
+          "children": []
+        }
+      ]
+    }
+  }
+}

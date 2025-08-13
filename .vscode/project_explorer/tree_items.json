@@ -1,0 +1,160 @@
+[
+  {
+    "id": "publish",
+    "typeAndPath": "script:npm run build && npm run publish",
+    "label": "Publish",
+    "cwd": "outputs/vscode_extension_code"
+  },
+  {
+    "id": "build",
+    "typeAndPath": "script:npm run build",
+    "label": "Build",
+    "cwd": "outputs/vscode_extension_code"
+  },
+  {
+    "id": "quickLinks",
+    "icon": "$(globe)",
+    "label": "Quick Links"
+  },
+  {
+    "id": "opencodeDocs",
+    "typeAndPath": "url:https://opencode.ai/docs/",
+    "label": "OpenCode Docs",
+    "parentId": "quickLinks"
+  },
+  {
+    "id": "design_docs",
+    "typeAndPath": "folder:design_docs",
+    "label": "Design Docs"
+  },
+  {
+    "id": "development_plan",
+    "typeAndPath": "file:design_docs/development_plan.md",
+    "icon": "projectExplorer:doc",
+    "label": "Development Plan",
+    "parentId": "design_docs",
+    "additionalContextMenuItems": {
+      "Open in Preview": "markdown.showPreview",
+      "Open in Editor": "vscode.open"
+    }
+  },
+  {
+    "id": "project_explorer",
+    "typeAndPath": "file:design_docs/project_explorer.md",
+    "icon": "projectExplorer:doc",
+    "label": "Project Explorer",
+    "parentId": "design_docs",
+    "additionalContextMenuItems": {
+      "Open in Preview": "markdown.showPreview",
+      "Open in Editor": "vscode.open"
+    }
+  },
+  {
+    "id": "title_action_icons",
+    "typeAndPath": "file:design_docs/title_action_icons/title_action_icons.md",
+    "icon": "projectExplorer:doc",
+    "label": "Title Action Icons",
+    "parentId": "design_docs",
+    "additionalContextMenuItems": {
+      "Open in Preview": "markdown.showPreview",
+      "Open in Editor": "vscode.open"
+    }
+  },
+  {
+    "id": "help.dark_mode.png",
+    "typeAndPath": "file:design_docs/title_action_icons/help.dark_mode.png",
+    "label": "Help Dark Mode",
+    "parentId": "title_action_icons"
+  },
+  {
+    "id": "help.light_mode.png",
+    "typeAndPath": "file:design_docs/title_action_icons/help.light_mode.png",
+    "label": "Help Light Mode",
+    "parentId": "title_action_icons"
+  },
+  {
+    "id": "lightbulb.dark_mode.png",
+    "typeAndPath": "file:design_docs/title_action_icons/lightbulb.dark_mode.png",
+    "label": "Lightbulb Dark Mode",
+    "parentId": "title_action_icons"
+  },
+  {
+    "id": "lightbulb.light_mode.png",
+    "typeAndPath": "file:design_docs/title_action_icons/lightbulb.light_mode.png",
+    "label": "Lightbulb Light Mode",
+    "parentId": "title_action_icons"
+  },
+  {
+    "id": "tree_items",
+    "typeAndPath": "file:design_docs/tree_items/tree_items.md",
+    "icon": "projectExplorer:doc",
+    "label": "Tree Items",
+    "parentId": "design_docs",
+    "additionalContextMenuItems": {
+      "Open in Preview": "markdown.showPreview",
+      "Open in Editor": "vscode.open"
+    }
+  },
+  {
+    "id": "doc_tree_items",
+    "typeAndPath": "file:design_docs/tree_items/doc_tree_items/doc_tree_items.md",
+    "icon": "projectExplorer:doc",
+    "label": "Doc Tree Items",
+    "parentId": "tree_items",
+    "additionalContextMenuItems": {
+      "Open in Preview": "markdown.showPreview",
+      "Open in Editor": "vscode.open"
+    }
+  },
+  {
+    "id": "doc.dark_mode.png",
+    "typeAndPath": "file:design_docs/tree_items/doc_tree_items/doc.dark_mode.png",
+    "label": "Doc Dark Mode",
+    "parentId": "doc_tree_items"
+  },
+  {
+    "id": "doc.light_mode.png",
+    "typeAndPath": "file:design_docs/tree_items/doc_tree_items/doc.light_mode.png",
+    "label": "Doc Light Mode",
+    "parentId": "doc_tree_items"
+  },
+  {
+    "id": "user_defined_tree_items",
+    "typeAndPath": "file:design_docs/tree_items/user_defined_tree_items.md",
+    "icon": "projectExplorer:doc",
+    "label": "User-Defined Tree Items",
+    "parentId": "tree_items",
+    "additionalContextMenuItems": {
+      "Open in Preview": "markdown.showPreview",
+      "Open in Editor": "vscode.open"
+    }
+  },
+  {
+    "id": "utils",
+    "typeAndPath": "folder:design_docs/utils",
+    "label": "Utils",
+    "parentId": "design_docs"
+  },
+  {
+    "id": "name_casing",
+    "typeAndPath": "file:design_docs/utils/name_casing.md",
+    "icon": "projectExplorer:doc",
+    "label": "Name Casing",
+    "parentId": "utils",
+    "additionalContextMenuItems": {
+      "Open in Preview": "markdown.showPreview",
+      "Open in Editor": "vscode.open"
+    }
+  },
+  {
+    "id": "vscode_extensions",
+    "typeAndPath": "file:design_docs/vscode_extensions.md",
+    "icon": "projectExplorer:doc",
+    "label": "VSCode Extensions",
+    "parentId": "design_docs",
+    "additionalContextMenuItems": {
+      "Open in Preview": "markdown.showPreview",
+      "Open in Editor": "vscode.open"
+    }
+  }
+]

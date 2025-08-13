@@ -33,7 +33,7 @@ A Visual Studio Code extension by ftl-tools that adds a Project Explorer view to
 
 ## Configuration
 
-Settings are available in the Settings UI (search for @ext:ftl-tools.project-explorer) or in settings.json.
+Settings are available in the Settings UI (search for @ext:ftl-tools.ftl-project-explorer) or in settings.json.
 
 - project-explorer.brainstormingDocPath (string)
   - Absolute path, ~ expansion, or path relative to the first workspace folder, pointing to your brainstorming document.

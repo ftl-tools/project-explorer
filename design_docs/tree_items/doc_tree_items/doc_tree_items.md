@@ -96,7 +96,8 @@ We want a [tree item builder](/design_docs/project_explorer.md#tree-builder) tha
 
 - `id`: The document file name without the path or `.md` extension.
 - `typeAndPath`: The document path with a `file:` prefix.
-- `icon`: Use the [doc icon](/design_docs/tree_items/doc_tree_items/doc.light_mode.png).
+- `additionalContextMenuItems`: Right-clicking on doc items should show also show "Open in Preview". and "Open in Editor" context menu options.
+- `icon`: Use the [doc icon](/design_docs/tree_items/doc_tree_items/doc.light_mode.png). Also see [how to use icons in an extension](/design_docs/vscode_extensions.md#reacting-to-light-and-dark-mode).
 - `label`: The docs title if it has one, otherwise use the file name in [Title Case](/design_docs/utils/name_casing.md#title-case) without the `.md` extension.
 - `parentId`: The id of the parent item, or `null` if it is a top-level item.
 

@@ -1,0 +1,18 @@
+{
+  "project-explorer.brainstormingDocPath": "brainstorming.md",
+  "project-explorer.openDocsInPreview": true,
+  "project-explorer.treeItems": [
+    {
+      "id": "test-item-1",
+      "typeAndPath": "file:sample.md",
+      "label": "Test Document",
+      "icon": "$(file-text)"
+    }
+  ],
+  "project-explorer.watchThese": [
+    {
+      "type": "docs",
+      "path": "."
+    }
+  ]
+}

@@ -60,7 +60,15 @@ export function activateParser(ctx: vscode.ExtensionContext): { dispose(): void 
     if (stat.isDirectory()) {
       const children: DocNode[] = [];
       for (const name of fs.readdirSync(p)) {
-        if (name === '.git' || name === 'node_modules') continue;
+        // Skip common hidden/system folders and files
+        if (name.startsWith('.') || 
+            name === 'node_modules' || 
+            name === '__pycache__' || 
+            name === '.DS_Store' ||
+            name === 'Thumbs.db' ||
+            name === 'desktop.ini' ||
+            name.endsWith('.tmp') ||
+            name.endsWith('.temp')) continue;
         const child = path.join(p, name);
         children.push(buildDocs(child));
       }

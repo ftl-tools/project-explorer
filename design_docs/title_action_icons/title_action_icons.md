@@ -49,13 +49,13 @@ The extension should watch a vscode workspace setting named `brainstormingDocPat
 
 ## Settings
 
-Always visible. Uses the built-in gear codicon (`$(gear)`). Tooltip: "Project Explorer Settings". Clicking opens the VS Code Settings UI filtered to this extension's settings using the query `@ext:ftl-tools.project-explorer`. If at least one workspace folder is open, open the Workspace settings view; otherwise open the User settings view and show a small info notification that workspace settings are unavailable. Never open JSON settings files; always use the Settings UI.
+Always visible. Uses the built-in gear codicon (`$(gear)`). Tooltip: "Project Explorer Settings". Clicking opens the VS Code Settings UI filtered to this extension's settings using the query `@ext:ftl-tools.ftl-project-explorer`. If at least one workspace folder is open, open the Workspace settings view; otherwise open the User settings view and show a small info notification that workspace settings are unavailable. Never open JSON settings files; always use the Settings UI.
 
 <details>
 <summary>Test that</summary>
 
 - The Settings action is always visible with gear codicon and tooltip "Project Explorer Settings".
-- With a workspace open, clicking opens the Settings UI to Workspace scope filtered by @ext:ftl-tools.project-explorer; with no workspace, opens User settings and shows an info notification about workspace settings.
+- With a workspace open, clicking opens the Settings UI to Workspace scope filtered by @ext:ftl-tools.ftl-project-explorer; with no workspace, opens User settings and shows an info notification about workspace settings.
 - Settings open in the Settings UI, never JSON; command leaves current editors untouched and does not change files unintentionally.
 - Filtering shows only this extension’s settings; toggling a setting reflects in behavior immediately where applicable.
 

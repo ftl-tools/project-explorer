@@ -53,7 +53,7 @@ The user can define settings in the VSCode settings that determine what files ge
 ```json
 {
   ... // Other VSCode settings
-  "projectExplorer.watchThese": [
+  "project-explorer.watchThese": [
     ... // Watch Paths
     {
       "type": "parserType",

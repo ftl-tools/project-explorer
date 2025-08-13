@@ -1,0 +1,1467 @@
+
+> ftl-project-explorer@0.1.110 test:ui
+> extest setup-and-run out/test/ui/*.test.js
+
+[33m
+Warning: You are using the untested NodeJS version '20.12.2'. The latest supported version is '18.x.x'.
+	 We recommend to use tested version to have ExTester working properly.
+
+[0m
+Downloading VS Code: 1.103.0 / stable
+VS Code exists in local cache, skipping download
+ChromeDriver 138.0.7204.183 exists in local cache, skipping download
+ WARNING  Neither a .vscodeignore file nor a "files" property in package.json was found. To ensure only necessary files are included in your extension, add a .vscodeignore file or specify the "files" property in package.json. More info: https://aka.ms/vscode-vscodeignore
+
+ INFO  Files included in the VSIX:
+ftl-project-explorer-0.1.110.vsix
+├─ [Content_Types].xml 
+├─ extension.vsixmanifest 
+└─ extension/
+   ├─ .gitignore [0.22 KB]
+   ├─ LICENSE.txt 
+   ├─ README.md [3.14 KB]
+   ├─ build.js [5.21 KB]
+   ├─ package.json [7.21 KB]
+   ├─ test_output.log [0.69 KB]
+   ├─ tsconfig.json [0.37 KB]
+   ├─ out/
+   │  ├─ extension.js [20.09 KB]
+   │  ├─ extension.js.map [66.41 KB]
+   │  ├─ src/ (10 files) [95.67 KB]
+   │  ├─ test/ (21 files) [291.16 KB]
+   │  └─ tests/ (20 files) [229.9 KB]
+   ├─ resources/
+   │  └─ icons/ (6 files) [7.82 KB]
+   ├─ src/
+   │  ├─ ProjectExplorerProvider.ts [26.98 KB]
+   │  ├─ builder.ts [4.8 KB]
+   │  ├─ extension.ts [5.57 KB]
+   │  ├─ parser.ts [4.03 KB]
+   │  └─ utils/ (1 file) [5.43 KB]
+   └─ tests/
+      ├─ README.md [2.46 KB]
+      ├─ ui/ (13 files) [141.66 KB]
+      └─ unit/ (1 file) [5.66 KB]
+
+=> Run vsce ls --tree to see all included files.
+
+ DONE  Packaged: /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/ftl-project-explorer-0.1.110.vsix (88 files, 202.77 KB)
+Warning: 'ms-enable-electron-run-as-node' is not in the list of known options, but still passed to Electron/Chromium.
+Installing extensions...
+Extension 'ftl-project-explorer-0.1.110.vsix' was successfully installed.
+
+
+Writing code settings to /var/folders/3c/5k5l4l7x00g60styy_w4m9fh0000gn/T/test-resources/settings/User/settings.json
+Launching browser...
+Browser ready in 4920 ms
+Launching tests...
+  Project Explorer Extension
+    Extension Activation and View Creation
+      ✔ should have extension identifier ftl-tools.project-explorer (41ms)
+      1) should show Project Explorer view in Explorer panel on activation
+      ✔ should create .vscode/project_explorer folder on activation (2045ms)
+      2) should handle enabling/disabling without errors
+      ✔ should handle color theme changes without breaking icons or view rendering (43ms)
+
+  Name Casing Utilities
+    snake_case Conversion
+      3) should convert the documented example exactly to snake_case
+      4) should preserve number groups and insert underscores between words and before numbers
+      ✔ should normalize mixed separators to single underscores
+      ✔ should collapse consecutive separators to one underscore
+      ✔ should trim leading and trailing separators
+      5) should lowercase and preserve Unicode letters
+    camelCase Conversion
+      6) should convert the documented example exactly to camelCase
+      7) should lowercase initial token and capitalize subsequent tokens
+      ✔ should keep digits adjacent to words as shown in example
+      ✔ should remove punctuation and separators
+      8) should normalize acronyms like "3D" to "3d" per example
+      9) should ignore leading and trailing separators
+      10) should preserve and case-fold non-ASCII letters appropriately
+    PascalCase Conversion
+      11) should convert the documented example exactly to PascalCase
+      ✔ should capitalize each token
+      12) should preserve digits and normalize like "3D" -> "3d"
+      ✔ should remove all separators
+      ✔ should not have leading underscores or punctuation
+      13) should handle single-token inputs gracefully
+      14) should handle all-separator inputs by yielding empty string
+    kebab-case Conversion
+      15) should convert the documented example exactly to kebab-case
+      16) should create lowercase tokens separated by single hyphens
+      17) should handle numeric boundaries like "3d"
+      ✔ should collapse multiple separators to single hyphens
+      ✔ should not have leading or trailing hyphens
+      18) should preserve non-ASCII letters
+      ✔ should remove unsupported punctuation
+    Title Case Conversion
+      19) should convert the documented example exactly to Title Case
+      20) should include spacing around numbers and capitalize each word
+      ✔ should normalize various separators to single spaces
+      21) should uppercase numeric tokens like "3D" as shown
+      ✔ should trim leading and trailing whitespace
+      22) should preserve apostrophes within words
+      23) should handle edge cases gracefully
+    Edge Cases and Error Handling
+      ✔ should handle empty strings
+      24) should handle strings with only separators
+      ✔ should handle single character inputs
+      ✔ should handle numeric-only inputs
+
+  Project Explorer Parser
+    Parser Output File Creation
+      ✔ should create .vscode/project_explorer/parser_output.json on activation (3120ms)
+      ✔ should contain top-level sections per tree item type (87ms)
+    File Watching and Updates
+      ✔ should update parser output when watched files change (80ms)
+      ✔ should preserve unchanged sections when updating specific sections (80ms)
+      ✔ should update watches when settings change at runtime (69ms)
+      ✔ should prune sections when watch paths are removed (85ms)
+    Parser Robustness
+      ✔ should maintain valid JSON under rapid edits (78ms)
+      ✔ should handle file permission errors gracefully (84ms)
+      ✔ should handle missing paths with non-blocking warnings (88ms)
+    Parser Output Shape
+      ✔ should match tree item type specifications (79ms)
+
+  Title Action Icons - Detailed Tests
+    General Title Action Tests
+      25) should show action icons in correct order: Help, Brainstorming (when configured), Settings, Collapse All
+      26) should use correct light/dark icon variants and update on theme change without reload
+    Help Action Tests
+      27) should be visible as leftmost title action with help icon in light/dark themes
+      28) should have tooltip "Help"
+      29) should open extension details page when clicked
+      30) should not change active editor or leave dirty files
+      ✔ should show non-blocking notification on errors
+    Brainstorming Action Tests
+      31) should be hidden when brainstormingDocPath is unset
+      32) should appear with tooltip "Brainstorming" when brainstormingDocPath is set to valid file
+      33) should open configured file in editor when clicked
+      34) should switch target file when setting is updated at runtime
+      35) should show non-blocking error for missing file and not create file
+      36) should handle relative vs absolute paths correctly
+      ✔ should be disabled when no workspace is open and path is relative
+      37) should react to theme changes for lightbulb icon
+    Settings Action Tests
+      38) should always be visible with gear codicon and tooltip "Project Explorer Settings"
+      39) should open Workspace settings filtered by extension when workspace is open
+      ✔ should open User settings with info notification when no workspace is open
+      40) should open Settings UI never JSON files
+      41) should leave current editors untouched and not change files unintentionally
+      42) should show only extension settings when filtered
+      43) should reflect setting changes in behavior immediately where applicable
+    Collapse All Action Tests
+      44) should be visible with correct codicon and tooltip
+      45) should collapse only Project Explorer nodes without opening editors
+      46) should work via command palette with same effect
+      47) should not affect other views trees
+      ✔ should run workbench.actions.treeView.projectExplorer.collapseAll command
+
+  Project Explorer Title Actions
+    Title Action Icons Rendering
+      48) should render four title actions in correct order: Help, Brainstorming, Settings, Collapse All
+      49) should have correct tooltips for each action
+      50) should show/hide Brainstorming action based on brainstormingDocPath setting
+      51) should persist other actions when brainstormingDocPath changes
+      52) should use correct icons in light/dark themes and update on theme change
+    Title Action Functionality
+      ✔ should open help when Help action is clicked
+      ✔ should open brainstorming document when Brainstorming action is clicked
+      ✔ should open settings when Settings action is clicked
+      ✔ should collapse all tree items when Collapse All action is clicked
+
+  Project Explorer Tree Builder
+    Tree Items File Generation
+      ✔ should generate .vscode/project_explorer/tree_items.json from parser_output.json (99ms)
+      ✔ should create flat array of tree item objects (76ms)
+    Incremental Updates
+      ✔ should yield minimal updates when only one section in parser_output.json changes (75ms)
+      ✔ should preserve order of unchanged items (74ms)
+    Error Handling
+      ✔ should fail gracefully on invalid parser_output.json sections (71ms)
+      ✔ should handle missing sections gracefully (77ms)
+      ✔ should wait for valid parser_output.json rather than emit corrupt output (87ms)
+      ✔ should keep last valid tree_items.json on builder errors (73ms)
+    Builder Logic Integration
+      ✔ should use builder logic from each tree item type (81ms)
+      ✔ should follow tree item format specification (77ms)
+
+  Tree Items - JSON Format and Behavior
+    Tree Item ID Tests
+      53) should ensure IDs are unique across all items in tree_items.json
+      54) should maintain stable IDs between rebuilds when inputs are unchanged
+      ✔ should not change IDs when only labels or icons change
+      ✔ should change IDs appropriately when path or type changes
+    typeAndPath Behavior Tests
+      file: type behavior
+        55) should open file in editor when tapped
+        ✔ should use default file icon when no custom icon specified
+        56) should show "Show in Editor's File Explorer" context menu option
+        ✔ should show error for missing file without creating it
+      folder: type behavior
+        ✔ should reveal folder in Explorer without opening editor
+        ✔ should use default folder icon when no custom icon specified
+        ✔ should show warning for missing folder
+      url: type behavior
+        ✔ should open URL in default external browser
+        ✔ should show globe icon while fetching favicon
+        ✔ should keep globe icon if favicon fetch fails
+        ✔ should show "Open in Browser" context menu option
+      script: type behavior
+        ✔ should run command headlessly when tapped
+        ✔ should show $(run) icon by default
+        ✔ should disable item while running and append "..." to label
+        ✔ should show output popup on success
+        ✔ should show error popup on failure
+        ✔ should prevent concurrent runs per item
+        ✔ should respect cwd and env when provided
+        ✔ should show "Run" context menu option
+        ✔ should not allow children for script items
+    Additional Context Menu Items Tests
+      57) should add custom context menu items from additionalContextMenuItems
+      ✔ should execute corresponding VS Code commands when custom menu items are clicked
+      ✔ should handle invalid or missing commands gracefully
+    Icon Handling Tests
+      ✔ should render local workspace SVG icons
+      ✔ should render built-in VS Code codicons
+      ✔ should render Project Explorer extension resource icons
+      ✔ should render remote SVG icons
+      ✔ should fall back to default icon when remote icon fails
+      ✔ should fall back when remote returns non-SVG content
+      ✔ should respect light/dark theme variants for extension icons
+      ✔ should ignore invalid icon specs with warning and use default
+    Label Generation Tests
+      58) should display provided label verbatim when specified
+      ✔ should derive label from path basename in Title Case without extension when label omitted
+      ✔ should follow Title Case rules from name casing spec
+      ✔ should treat empty or whitespace-only labels as missing
+    Parent-Child Hierarchy Tests
+      59) should nest items with parentId under correct parent
+      60) should show items without parentId at root level
+      ✔ should handle missing or invalid parentId gracefully
+      ✔ should detect and break cycles in parent relationships
+      ✔ should maintain parent-child relationships during tree updates
+      ✔ should handle deep nesting levels appropriately
+    Tree Item JSON Format Validation
+      ✔ should validate required fields in tree item JSON
+      ✔ should handle malformed typeAndPath gracefully
+      ✔ should validate JSON structure and types
+
+  Project Explorer Tree Rendering
+    Tree Item Rendering Order
+      61) should render items in same order as tree_items.json
+      62) should maintain order when tree_items.json is updated
+    Live Updates
+      63) should update live when tree_items.json changes
+      64) should preserve expansion state for unchanged items
+      65) should add/remove items without affecting unrelated nodes
+    Tree Item Click Behavior
+      66) should route to expected default behaviors for different typeAndPath items
+      ✔ should handle file: typeAndPath items correctly
+      ✔ should handle folder: typeAndPath items correctly
+      ✔ should handle url: typeAndPath items correctly
+      ✔ should handle script: typeAndPath items correctly
+    Icon Handling
+      67) should react to theme changes immediately
+      68) should fall back gracefully for broken icon paths
+      69) should handle both codicon and image path icons
+    Tree Item Labels and Structure
+      70) should display correct labels for tree items
+      71) should handle nested tree items correctly
+
+  User-Defined Tree Items
+    User-Defined Tree Items Settings
+      72) should reflect adding items in userDefinedTreeItems in tree without reload
+      73) should reflect editing items in userDefinedTreeItems in tree without reload
+      74) should reflect removing items from userDefinedTreeItems in tree without reload
+      75) should maintain order matching settings
+      ✔ should ignore invalid item shapes with clear warning
+      76) should not crash extension when invalid items are present
+      77) should render valid items even when some items are invalid
+      ✔ should highlight errors in Settings UI where possible
+      ✔ should validate settings schema in Settings UI
+    User-Defined Tree Items Parsing
+      ✔ should include userDefined array in parser_output.json mirroring settings
+      ✔ should preserve settings order and content for valid items
+      ✔ should update only userDefined section when settings change
+      ✔ should preserve other sections when userDefined items change
+      ✔ should remove item from array when removed from settings
+      ✔ should omit malformed items with warnings
+      ✔ should maintain valid JSON output even with malformed items
+      ✔ should handle empty userDefinedTreeItems array
+      ✔ should handle missing userDefinedTreeItems setting
+    User-Defined Tree Items Tree Building
+      ✔ should copy all valid user-defined items into tree_items.json unchanged
+      ✔ should preserve order of user-defined items in tree_items.json
+      ✔ should skip invalid items with warnings
+      78) should realize parent-child relationships defined by parentId correctly
+      ✔ should handle missing parents without crashing builder
+      ✔ should report and resolve duplicate IDs across user-defined and other sources
+      79) should handle user-defined items with complex parent-child hierarchies
+      80) should integrate user-defined items with other tree item types
+      81) should handle user-defined items with all supported typeAndPath types
+      82) should handle user-defined items with custom icons and labels
+      83) should handle user-defined items with additionalContextMenuItems
+    User-Defined Tree Items Integration
+      84) should work with real-time settings changes
+      85) should maintain expansion state during settings changes
+      ✔ should handle workspace changes affecting user-defined items
+      ✔ should work correctly with multiple workspace folders
+    User-Defined Tree Items Error Handling
+      ✔ should handle JSON parsing errors gracefully
+      ✔ should handle schema validation errors
+      ✔ should handle circular parent references
+      ✔ should handle extremely large numbers of user-defined items
+
+Shutting down the browser
+
+  114 passing (1m)
+  85 failing
+
+  1) Project Explorer Extension
+       Extension Activation and View Creation
+         should show Project Explorer view in Explorer panel on activation:
+     AssertionError: expected [ '' ] to include 'Project Explorer'
+      at Context.<anonymous> (out/test/ui/extension.test.js:30:43)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  2) Project Explorer Extension
+       Extension Activation and View Creation
+         should handle enabling/disabling without errors:
+     AssertionError: expected [ '' ] to include 'Project Explorer'
+      at Context.<anonymous> (out/test/ui/extension.test.js:49:50)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  3) Name Casing Utilities
+       snake_case Conversion
+         should convert the documented example exactly to snake_case:
+
+      AssertionError: expected 'the3dquick_brown_fox_jumps_overthelaz…' to equal 'the_3d_quick_brown_fox_jumps_over_the…'
+      + expected - actual
+
+      -the3dquick_brown_fox_jumps_overthelazy_dog
+      +the_3d_quick_brown_fox_jumps_over_the_lazy_dog
+      
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:35:43)
+      at process.processImmediate (node:internal/timers:478:21)
+
+  4) Name Casing Utilities
+       snake_case Conversion
+         should preserve number groups and insert underscores between words and before numbers:
+
+      AssertionError: Failed for input: word123: expected 'word123' to equal 'word_123'
+      + expected - actual
+
+      -word123
+      +word_123
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:47:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:45:23)
+
+  5) Name Casing Utilities
+       snake_case Conversion
+         should lowercase and preserve Unicode letters:
+
+      AssertionError: Failed for input: café: expected 'caf' to equal 'café'
+      + expected - actual
+
+      -caf
+      +café
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:104:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:102:23)
+
+  6) Name Casing Utilities
+       camelCase Conversion
+         should convert the documented example exactly to camelCase:
+
+      AssertionError: expected 'the3DQuickBrownFoxJumpsOverTheLazyDog.' to equal 'the3dQuickBrownFoxJumpsOverTheLazyDog'
+      + expected - actual
+
+      -the3DQuickBrownFoxJumpsOverTheLazyDog.
+      +the3dQuickBrownFoxJumpsOverTheLazyDog
+      
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:112:43)
+      at process.processImmediate (node:internal/timers:478:21)
+
+  7) Name Casing Utilities
+       camelCase Conversion
+         should lowercase initial token and capitalize subsequent tokens:
+
+      AssertionError: Failed for input: FIRST SECOND: expected 'fIRSTSECOND' to equal 'firstSecond'
+      + expected - actual
+
+      -fIRSTSECOND
+      +firstSecond
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:123:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:121:23)
+
+  8) Name Casing Utilities
+       camelCase Conversion
+         should normalize acronyms like "3D" to "3d" per example:
+
+      AssertionError: Failed for input: 3D quick: expected '3DQuick' to equal '3dQuick'
+      + expected - actual
+
+      -3DQuick
+      +3dQuick
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:160:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:158:23)
+
+  9) Name Casing Utilities
+       camelCase Conversion
+         should ignore leading and trailing separators:
+
+      AssertionError: Failed for input: word word-: expected 'wordWord-' to equal 'wordWord'
+      + expected - actual
+
+      -wordWord-
+      +wordWord
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:172:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:170:23)
+
+  10) Name Casing Utilities
+       camelCase Conversion
+         should preserve and case-fold non-ASCII letters appropriately:
+
+      AssertionError: Failed for input: café shop: expected 'cafShop' to equal 'caféShop'
+      + expected - actual
+
+      -cafShop
+      +caféShop
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:183:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:181:23)
+
+  11) Name Casing Utilities
+       PascalCase Conversion
+         should convert the documented example exactly to PascalCase:
+
+      AssertionError: expected 'The3DQuickBrownFoxJumpsOverTheLazyDog.' to equal 'The3dQuickBrownFoxJumpsOverTheLazyDog'
+      + expected - actual
+
+      -The3DQuickBrownFoxJumpsOverTheLazyDog.
+      +The3dQuickBrownFoxJumpsOverTheLazyDog
+      
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:191:43)
+      at process.processImmediate (node:internal/timers:478:21)
+
+  12) Name Casing Utilities
+       PascalCase Conversion
+         should preserve digits and normalize like "3D" -> "3d":
+
+      AssertionError: Failed for input: 3D model: expected '3DModel' to equal '3dModel'
+      + expected - actual
+
+      -3DModel
+      +3dModel
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:214:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:212:23)
+
+  13) Name Casing Utilities
+       PascalCase Conversion
+         should handle single-token inputs gracefully:
+
+      AssertionError: Failed for input: WORD: expected 'WORD' to equal 'Word'
+      + expected - actual
+
+      -WORD
+      +Word
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:252:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:250:23)
+
+  14) Name Casing Utilities
+       PascalCase Conversion
+         should handle all-separator inputs by yielding empty string:
+
+      AssertionError: Failed for input: ---: expected '-' to equal ''
+      + expected - actual
+
+      --
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:265:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:263:23)
+
+  15) Name Casing Utilities
+       kebab-case Conversion
+         should convert the documented example exactly to kebab-case:
+
+      AssertionError: expected 'the3dquick-brown-fox-jumps-overthelaz…' to equal 'the-3d-quick-brown-fox-jumps-over-the…'
+      + expected - actual
+
+      -the3dquick-brown-fox-jumps-overthelazy-dog
+      +the-3d-quick-brown-fox-jumps-over-the-lazy-dog
+      
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:273:43)
+      at process.processImmediate (node:internal/timers:478:21)
+
+  16) Name Casing Utilities
+       kebab-case Conversion
+         should create lowercase tokens separated by single hyphens:
+
+      AssertionError: Failed for input: CamelCaseWord: expected 'camelcaseword' to equal 'camel-case-word'
+      + expected - actual
+
+      -camelcaseword
+      +camel-case-word
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:284:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:282:23)
+
+  17) Name Casing Utilities
+       kebab-case Conversion
+         should handle numeric boundaries like "3d":
+
+      AssertionError: Failed for input: HTML5 parser: expected 'html5-parser' to equal 'html-5-parser'
+      + expected - actual
+
+      -html5-parser
+      +html-5-parser
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:296:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:294:23)
+
+  18) Name Casing Utilities
+       kebab-case Conversion
+         should preserve non-ASCII letters:
+
+      AssertionError: Failed for input: café shop: expected 'caf-shop' to equal 'café-shop'
+      + expected - actual
+
+      -caf-shop
+      +café-shop
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:333:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:331:23)
+
+  19) Name Casing Utilities
+       Title Case Conversion
+         should convert the documented example exactly to Title Case:
+
+      AssertionError: expected 'The3DQuick Brown Fox Jumps OverTheLaz…' to equal 'The 3D Quick Brown Fox Jumps Over The…'
+      + expected - actual
+
+      -The3DQuick Brown Fox Jumps OverTheLazy Dog
+      +The 3D Quick Brown Fox Jumps Over The Lazy Dog
+      
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:354:43)
+      at process.processImmediate (node:internal/timers:478:21)
+
+  20) Name Casing Utilities
+       Title Case Conversion
+         should include spacing around numbers and capitalize each word:
+
+      AssertionError: Failed for input: word123word: expected 'Word123word' to equal 'Word 123 Word'
+      + expected - actual
+
+      -Word123word
+      +Word 123 Word
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:365:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:363:23)
+
+  21) Name Casing Utilities
+       Title Case Conversion
+         should uppercase numeric tokens like "3D" as shown:
+
+      AssertionError: Failed for input: 3d model: expected '3d Model' to equal '3D Model'
+      + expected - actual
+
+      -3d Model
+      +3D Model
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:391:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:389:23)
+
+  22) Name Casing Utilities
+       Title Case Conversion
+         should preserve apostrophes within words:
+
+      AssertionError: Failed for input: dog's toy: expected 'Dog\'S Toy' to equal 'Dog\'s Toy'
+      + expected - actual
+
+      -Dog'S Toy
+      +Dog's Toy
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:415:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:413:23)
+
+  23) Name Casing Utilities
+       Title Case Conversion
+         should handle edge cases gracefully:
+
+      AssertionError: Failed for input: a1b2c3: expected 'A1b2c3' to equal 'A1B2C3'
+      + expected - actual
+
+      -A1b2c3
+      +A1B2C3
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:428:47
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:426:23)
+
+  24) Name Casing Utilities
+       Edge Cases and Error Handling
+         should handle strings with only separators:
+
+      AssertionError: camelCase failed for: ---: expected '-' to equal ''
+      + expected - actual
+
+      --
+      
+      at /Users/melchiahmauck/Business/Tools/project-explorer/outputs/vscode_extension_code/out/test/ui/name-casing.test.js:444:59
+      at Array.forEach (<anonymous>)
+      at Context.<anonymous> (out/test/ui/name-casing.test.js:442:33)
+
+  25) Title Action Icons - Detailed Tests
+       General Title Action Tests
+         should show action icons in correct order: Help, Brainstorming (when configured), Settings, Collapse All:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-tl-row"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async Context.<anonymous> (out/test/ui/title-action-icons.test.js:35:38)
+
+  26) Title Action Icons - Detailed Tests
+       General Title Action Tests
+         should use correct light/dark icon variants and update on theme change without reload:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:51:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  27) Title Action Icons - Detailed Tests
+       Help Action Tests
+         should be visible as leftmost title action with help icon in light/dark themes:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:65:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  28) Title Action Icons - Detailed Tests
+       Help Action Tests
+         should have tooltip "Help":
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:77:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  29) Title Action Icons - Detailed Tests
+       Help Action Tests
+         should open extension details page when clicked:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:91:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  30) Title Action Icons - Detailed Tests
+       Help Action Tests
+         should not change active editor or leave dirty files:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:106:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  31) Title Action Icons - Detailed Tests
+       Brainstorming Action Tests
+         should be hidden when brainstormingDocPath is unset:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:131:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  32) Title Action Icons - Detailed Tests
+       Brainstorming Action Tests
+         should appear with tooltip "Brainstorming" when brainstormingDocPath is set to valid file:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:145:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  33) Title Action Icons - Detailed Tests
+       Brainstorming Action Tests
+         should open configured file in editor when clicked:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:159:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  34) Title Action Icons - Detailed Tests
+       Brainstorming Action Tests
+         should switch target file when setting is updated at runtime:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:173:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  35) Title Action Icons - Detailed Tests
+       Brainstorming Action Tests
+         should show non-blocking error for missing file and not create file:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:188:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  36) Title Action Icons - Detailed Tests
+       Brainstorming Action Tests
+         should handle relative vs absolute paths correctly:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:201:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  37) Title Action Icons - Detailed Tests
+       Brainstorming Action Tests
+         should react to theme changes for lightbulb icon:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:223:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  38) Title Action Icons - Detailed Tests
+       Settings Action Tests
+         should always be visible with gear codicon and tooltip "Project Explorer Settings":
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:238:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  39) Title Action Icons - Detailed Tests
+       Settings Action Tests
+         should open Workspace settings filtered by extension when workspace is open:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:253:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  40) Title Action Icons - Detailed Tests
+       Settings Action Tests
+         should open Settings UI never JSON files:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:277:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  41) Title Action Icons - Detailed Tests
+       Settings Action Tests
+         should leave current editors untouched and not change files unintentionally:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:292:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  42) Title Action Icons - Detailed Tests
+       Settings Action Tests
+         should show only extension settings when filtered:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:306:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  43) Title Action Icons - Detailed Tests
+       Settings Action Tests
+         should reflect setting changes in behavior immediately where applicable:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:320:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  44) Title Action Icons - Detailed Tests
+       Collapse All Action Tests
+         should be visible with correct codicon and tooltip:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:334:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  45) Title Action Icons - Detailed Tests
+       Collapse All Action Tests
+         should collapse only Project Explorer nodes without opening editors:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:350:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  46) Title Action Icons - Detailed Tests
+       Collapse All Action Tests
+         should work via command palette with same effect:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:365:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  47) Title Action Icons - Detailed Tests
+       Collapse All Action Tests
+         should not affect other views trees:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-action-icons.test.js:378:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  48) Project Explorer Title Actions
+       Title Action Icons Rendering
+         should render four title actions in correct order: Help, Brainstorming, Settings, Collapse All:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-actions.test.js:35:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  49) Project Explorer Title Actions
+       Title Action Icons Rendering
+         should have correct tooltips for each action:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-actions.test.js:48:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  50) Project Explorer Title Actions
+       Title Action Icons Rendering
+         should show/hide Brainstorming action based on brainstormingDocPath setting:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-actions.test.js:64:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  51) Project Explorer Title Actions
+       Title Action Icons Rendering
+         should persist other actions when brainstormingDocPath changes:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-actions.test.js:74:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  52) Project Explorer Title Actions
+       Title Action Icons Rendering
+         should use correct icons in light/dark themes and update on theme change:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/title-actions.test.js:89:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  53) Tree Items - JSON Format and Behavior
+       Tree Item ID Tests
+         should ensure IDs are unique across all items in tree_items.json:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-items.test.js:35:38)
+
+  54) Tree Items - JSON Format and Behavior
+       Tree Item ID Tests
+         should maintain stable IDs between rebuilds when inputs are unchanged:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-items.test.js:53:38)
+
+  55) Tree Items - JSON Format and Behavior
+       typeAndPath Behavior Tests
+         file: type behavior
+           should open file in editor when tapped:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-items.test.js:88:42)
+
+  56) Tree Items - JSON Format and Behavior
+       typeAndPath Behavior Tests
+         file: type behavior
+           should show "Show in Editor's File Explorer" context menu option:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-items.test.js:112:42)
+
+  57) Tree Items - JSON Format and Behavior
+       Additional Context Menu Items Tests
+         should add custom context menu items from additionalContextMenuItems:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-items.test.js:290:38)
+
+  58) Tree Items - JSON Format and Behavior
+       Label Generation Tests
+         should display provided label verbatim when specified:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-items.test.js:402:38)
+
+  59) Tree Items - JSON Format and Behavior
+       Parent-Child Hierarchy Tests
+         should nest items with parentId under correct parent:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-items.test.js:461:38)
+
+  60) Tree Items - JSON Format and Behavior
+       Parent-Child Hierarchy Tests
+         should show items without parentId at root level:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-items.test.js:473:38)
+
+  61) Project Explorer Tree Rendering
+       Tree Item Rendering Order
+         should render items in same order as tree_items.json:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:32:38)
+
+  62) Project Explorer Tree Rendering
+       Tree Item Rendering Order
+         should maintain order when tree_items.json is updated:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:45:38)
+
+  63) Project Explorer Tree Rendering
+       Live Updates
+         should update live when tree_items.json changes:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:60:38)
+
+  64) Project Explorer Tree Rendering
+       Live Updates
+         should preserve expansion state for unchanged items:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:73:38)
+
+  65) Project Explorer Tree Rendering
+       Live Updates
+         should add/remove items without affecting unrelated nodes:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:87:38)
+
+  66) Project Explorer Tree Rendering
+       Tree Item Click Behavior
+         should route to expected default behaviors for different typeAndPath items:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:97:38)
+
+  67) Project Explorer Tree Rendering
+       Icon Handling
+         should react to theme changes immediately:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:154:38)
+
+  68) Project Explorer Tree Rendering
+       Icon Handling
+         should fall back gracefully for broken icon paths:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:167:38)
+
+  69) Project Explorer Tree Rendering
+       Icon Handling
+         should handle both codicon and image path icons:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:179:38)
+
+  70) Project Explorer Tree Rendering
+       Tree Item Labels and Structure
+         should display correct labels for tree items:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:189:38)
+
+  71) Project Explorer Tree Rendering
+       Tree Item Labels and Structure
+         should handle nested tree items correctly:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/tree-rendering.test.js:212:38)
+
+  72) User-Defined Tree Items
+       User-Defined Tree Items Settings
+         should reflect adding items in userDefinedTreeItems in tree without reload:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:63:38)
+
+  73) User-Defined Tree Items
+       User-Defined Tree Items Settings
+         should reflect editing items in userDefinedTreeItems in tree without reload:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:81:31)
+
+  74) User-Defined Tree Items
+       User-Defined Tree Items Settings
+         should reflect removing items from userDefinedTreeItems in tree without reload:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:99:31)
+
+  75) User-Defined Tree Items
+       User-Defined Tree Items Settings
+         should maintain order matching settings:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:112:31)
+
+  76) User-Defined Tree Items
+       User-Defined Tree Items Settings
+         should not crash extension when invalid items are present:
+
+      AssertionError: expected 'No Folder Opened' to equal 'Project Explorer'
+      + expected - actual
+
+      -No Folder Opened
+      +Project Explorer
+      
+      at Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:136:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+
+  77) User-Defined Tree Items
+       User-Defined Tree Items Settings
+         should render valid items even when some items are invalid:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:148:31)
+
+  78) User-Defined Tree Items
+       User-Defined Tree Items Tree Building
+         should realize parent-child relationships defined by parentId correctly:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:313:31)
+
+  79) User-Defined Tree Items
+       User-Defined Tree Items Tree Building
+         should handle user-defined items with complex parent-child hierarchies:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:349:31)
+
+  80) User-Defined Tree Items
+       User-Defined Tree Items Tree Building
+         should integrate user-defined items with other tree item types:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:364:31)
+
+  81) User-Defined Tree Items
+       User-Defined Tree Items Tree Building
+         should handle user-defined items with all supported typeAndPath types:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:378:31)
+
+  82) User-Defined Tree Items
+       User-Defined Tree Items Tree Building
+         should handle user-defined items with custom icons and labels:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:392:31)
+
+  83) User-Defined Tree Items
+       User-Defined Tree Items Tree Building
+         should handle user-defined items with additionalContextMenuItems:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:410:31)
+
+  84) User-Defined Tree Items
+       User-Defined Tree Items Integration
+         should work with real-time settings changes:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:426:31)
+
+  85) User-Defined Tree Items
+       User-Defined Tree Items Integration
+         should maintain expansion state during settings changes:
+     NoSuchElementError: no such element: Unable to locate element: {"method":"css selector","selector":".monaco-list"}
+  (Session info: chrome=138.0.7204.100)
+      at Object.throwDecodedError (node_modules/selenium-webdriver/lib/error.js:523:15)
+      at parseHttpResponse (node_modules/selenium-webdriver/lib/http.js:524:13)
+      at Executor.execute (node_modules/selenium-webdriver/lib/http.js:456:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+      at async Driver.execute (node_modules/selenium-webdriver/lib/webdriver.js:745:17)
+      at async CustomTreeSection.getContainer (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:51:27)
+      at async CustomTreeSection.getVisibleItems (node_modules/monaco-page-objects/out/components/sidebar/tree/custom/CustomTreeSection.js:26:27)
+      at async Context.<anonymous> (out/test/ui/user-defined-tree-items.test.js:439:31)
+
+
+
+[33mINFO: Screenshots of failures can be found in: /var/folders/3c/5k5l4l7x00g60styy_w4m9fh0000gn/T/test-resources/screenshots
+[0m

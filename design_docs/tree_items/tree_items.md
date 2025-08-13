@@ -19,6 +19,9 @@ They are tracked using the following format:
 {
   "id": "item-id",
   "typeAndPath": "itemType:item/path",
+  "additionalContextMenuItems": {
+    "<Menu Item Label>": "vscode.command"
+  },
   "icon": "iconSource:icon/path/or/id.svg",
   "label": "Item Label",
   "parentId": "parent-item-id"
@@ -41,10 +44,10 @@ Let's break these down in detail:
 
 - `typeAndPath`: A string that specifies both the type and path of the item separated by a `:`. We combine these two into one property because usually they should both be defined or neither of them defined. The behavior of this item will change based on the type:
 
-  - `file:path/to/file.txt`: When tapped open the file in the editor. When no icon is specified, use the default icon for this file type.
-  - `folder:path/to/folder`: When tapped open the folder in the explorer. When no icon is specified, use the default icon for this file type.
-  - `url:https://example.com`: When tapped open the URL in an external browser. When no icon is specified, attempt to fetch and use the site’s favicon; while loading show the VS Code globe codicon (`$(globe)`), and if favicon fetching fails, keep using the globe.
-  - `script:<command and args>`: When tapped run the command headlessly using the system shell. Script items have the VS Code run codicon (`$(run)`) by default, cannot have children, and are disabled while running. While running, append `...` to the label. Optional `cwd` and `env` fields control working directory and environment variables. If the script succeeds show a pop-up with the output, and if it fails show an error pop-up with the error message. Only one run per item may be active at a time.
+  - `file:path/to/file.txt`: When tapped open the file in the editor. When no icon is specified, use the default icon for this file type. Right-clicking on file items should show a "Show in Editor's File Explorer" context menu option.
+  - `folder:path/to/folder`: When tapped open the folder in the explorer. When no icon is specified, use the default icon for this file type. Right-clicking on folder items should show a "Show in Editor's File Explorer" context menu option.
+  - `url:https://example.com`: When tapped open the URL in an external browser. When no icon is specified, attempt to fetch and use the site’s favicon; while loading show the VS Code globe codicon (`$(globe)`), and if favicon fetching fails, keep using the globe. Right-clicking on script items should show an "Open in Browser" context menu option.
+  - `script:<command and args>`: When tapped run the command headlessly using the system shell. Script items have the VS Code run codicon (`$(run)`) by default, cannot have children, and are disabled while running. While running, append `...` to the label. Optional `cwd` and `env` fields control working directory and environment variables. If the script succeeds show a pop-up with the output, and if it fails show an error pop-up with the error message. Only one run per item may be active at a time. Right-clicking on script items should show a "Run" context menu option.
   - _Note: Some tree item types might override these default behaviors._
 
   <details>
@@ -54,6 +57,17 @@ Let's break these down in detail:
   - folder: reveals the folder in the Explorer without opening an editor; default icon is the folder icon; missing folder shows warning.
   - url: opens in default external browser; shows globe while fetching favicon; if fetch fails or is slow, globe remains and UI stays responsive.
   - script: runs command headlessly; shows $(run) icon; disables item while running and appends "..." to label; shows output on success and error pop-up on failure; prevents concurrent runs per item; respects cwd and env when provided; long-running scripts can be triggered again only after completion.
+
+  [How to Test](/design_docs/vscode_extensions.md#testing)
+
+  </details><br>
+
+- `additionalContextMenuItems`: Optionally specify additional context menu items for this item. This is a map of menu item labels to their corresponding VS Code commands.
+
+  <details>
+  <summary>Test that</summary>
+
+  - TODO...
 
   [How to Test](/design_docs/vscode_extensions.md#testing)
 
