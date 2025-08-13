@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import { get as getSetting, watch as watchSetting } from './utils/settingsUtil';
 
 const ensureDir = (p: string) => { try { fs.mkdirSync(p, { recursive: true }); } catch {} };
 const writeJsonAtomic = (file: string, obj: unknown) => {
@@ -28,9 +29,11 @@ export function activateParser(ctx: vscode.ExtensionContext): { dispose(): void 
     timer = setTimeout(run, 150);
   };
 
-  const cfgListener = vscode.workspace.onDidChangeConfiguration(e => {
-    if (e.affectsConfiguration('project-explorer.watchThese') || e.affectsConfiguration('project-explorer.userDefinedTreeItems') || e.affectsConfiguration('project-explorer.treeItems')) debouncedRun();
-  });
+  const settingsSub = watchSetting<any>([
+    'ftl-tools.project-explorer.watchThese',
+    'ftl-tools.project-explorer.userDefinedTreeItems',
+    'ftl-tools.project-explorer.treeItems',
+  ], () => debouncedRun());
 
   const fsWatchers: vscode.FileSystemWatcher[] = [];
 
@@ -83,9 +86,13 @@ export function activateParser(ctx: vscode.ExtensionContext): { dispose(): void 
   const rel = (abs: string) => ws ? path.relative(ws.uri.fsPath, abs) : abs;
 
   const run = () => {
-    const cfg = vscode.workspace.getConfiguration('project-explorer');
-    const watch = cfg.get<any[]>('watchThese') || [];
-    const userDefined = (cfg.get<any[]>('userDefinedTreeItems') || cfg.get<any[]>('treeItems') || []).filter(Boolean);
+    const watch = (getSetting<any[]>('ftl-tools.project-explorer.watchThese') || []).filter(Boolean);
+    const ud = getSetting<any[]>('ftl-tools.project-explorer.userDefinedTreeItems') || [];
+    const legacy = getSetting<any[]>('ftl-tools.project-explorer.treeItems') || [];
+    const userDefined = (ud.length ? ud : legacy).filter(Boolean);
+    if (!ud.length && legacy.length) {
+      vscode.window.showWarningMessage('ftl-tools.project-explorer.treeItems is deprecated. Please migrate to ftl-tools.project-explorer.userDefinedTreeItems.');
+    }
 
     const out: ParserSections = {};
     if (userDefined.length > 0) out.userDefined = userDefined;
@@ -110,6 +117,6 @@ export function activateParser(ctx: vscode.ExtensionContext): { dispose(): void 
 
   if (ws) run();
 
-  ctx.subscriptions.push(cfgListener);
-  return { dispose() { while (fsWatchers.length) fsWatchers.pop()?.dispose(); if (timer) clearTimeout(timer); } };
+  ctx.subscriptions.push(settingsSub);
+  return { dispose() { while (fsWatchers.length) fsWatchers.pop()?.dispose(); if (timer) clearTimeout(timer); settingsSub.dispose(); } };
 }

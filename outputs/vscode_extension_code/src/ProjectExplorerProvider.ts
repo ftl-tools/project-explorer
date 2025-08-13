@@ -179,6 +179,28 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
     constructor(context: vscode.ExtensionContext) {
         this.favicons = new FaviconCache(context);
         const ws = vscode.workspace.workspaceFolders?.[0];
+        // live watch for doc preview toggle
+        const settings = require('./utils/settingsUtil') as typeof import('./utils/settingsUtil');
+        settings.watch<boolean>('ftl-tools.project-explorer.openDocsInPreview' as any, () => {
+            // rebuild commands for markdown items only
+            for (const [id, node] of this.items) {
+                const cmd = (node as any).command;
+                const label = String(node.label || '');
+                // re-make node if it's file markdown to update command
+                const v = { id, label } as any;
+                const existing = node as any;
+                const hasFileOpen = existing?.command?.arguments && existing?.command?.arguments[0] && existing.command.arguments[0] instanceof vscode.Uri;
+                if (hasFileOpen) {
+                    const uri = existing.command.arguments[0] as vscode.Uri;
+                    const isMd = uri.fsPath.toLowerCase().endsWith('.md');
+                    if (isMd) {
+                        const openInPreview = settings.get<boolean>('ftl-tools.project-explorer.openDocsInPreview') ?? true;
+                        node.command = openInPreview ? { command: 'markdown.showPreview', title: 'Open Preview', arguments: [uri] } as any : { command: 'vscode.open', title: 'Open File', arguments: [uri] };
+                        this._onDidChangeTreeData.fire(node);
+                    }
+                }
+            }
+        });
         if (ws) {
             this.treeFileUri = vscode.Uri.joinPath(ws.uri, '.vscode', 'project_explorer', 'tree_items.json');
             const pattern = new vscode.RelativePattern(ws, '.vscode/project_explorer/tree_items.json');
@@ -505,8 +527,8 @@ export class ProjectExplorerProvider implements vscode.TreeDataProvider<ProjectE
                 // If no custom icon is set, let VSCode use its default markdown icon
             }
             if (isMd) {
-                const cfg = vscode.workspace.getConfiguration('project-explorer');
-                const openInPreview = cfg.get<boolean>('openDocsInPreview', true);
+                const settings = require('./utils/settingsUtil') as typeof import('./utils/settingsUtil');
+                const openInPreview = settings.get<boolean>('ftl-tools.project-explorer.openDocsInPreview') ?? true;
                 if (openInPreview) node.command = { command: 'markdown.showPreview', title: 'Open Preview', arguments: [uri] } as any;
                 else node.command = { command: 'vscode.open', title: 'Open File', arguments: [uri] };
             } else {

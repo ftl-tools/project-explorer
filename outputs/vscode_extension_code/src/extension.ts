@@ -24,38 +24,21 @@ export async function activate(context: vscode.ExtensionContext) {
   });
   context.subscriptions.push(themeSub);
 
+  const settings = await import('./utils/settingsUtil');
   const updateBrainstormingContext = () => {
-    const cfg = vscode.workspace.getConfiguration("project-explorer");
-    const raw = cfg.get<string>("brainstormingDocPath") || "";
-    const has = typeof raw === "string" && raw.trim().length > 0;
-    void vscode.commands.executeCommand(
-      "setContext",
-      "projectExplorer.hasBrainstorming",
-      has,
-    );
+    const raw = settings.get<string>('ftl-tools.project-explorer.brainstormingDocPath') || '';
+    const has = typeof raw === 'string' && raw.trim().length > 0;
+    void vscode.commands.executeCommand('setContext','projectExplorer.hasBrainstorming',has);
   };
-
+  settings.watch<string>('ftl-tools.project-explorer.brainstormingDocPath' as any, () => updateBrainstormingContext());
   updateBrainstormingContext();
-
-  context.subscriptions.push(
-    vscode.workspace.onDidChangeConfiguration((e) => {
-      if (
-        e.affectsConfiguration("project-explorer.brainstormingDocPath") ||
-        e.affectsConfiguration("project-explorer")
-      ) {
-        updateBrainstormingContext();
-      }
-    }),
-  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "projectExplorer.openBrainstormingDoc",
       async () => {
-        const cfg = vscode.workspace.getConfiguration("project-explorer");
-        const pathSetting = (
-          cfg.get<string>("brainstormingDocPath") || ""
-        ).trim();
+        const settings = await import('./utils/settingsUtil');
+        const pathSetting = (settings.get<string>('ftl-tools.project-explorer.brainstormingDocPath') || '').trim();
         if (!pathSetting) {
           vscode.window.showWarningMessage(
             "No brainstormingDocPath is configured.",
