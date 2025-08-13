@@ -1,7 +1,7 @@
 ---
 description: Writes, estimates, and maintains development plans.
 mode: all
-model: openai/gpt-5-mini
+model: openai/gpt-5
 reasoningEffort: high
 ---
 

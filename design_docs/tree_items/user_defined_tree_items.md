@@ -4,7 +4,7 @@ Users should be able to define custom items show up in the [tree view](/design_d
 
 ## Settings
 
-These items are defined as a list of [tree item objects](/design_docs/tree_items/tree_items.md#tree-item-json-format) in a vscode workspace setting, using the following format:
+These items are defined as a list of [tree item objects](/design_docs/tree_items/tree_items.md#tree-item-json-format) in a vscode workspace setting in the [VSCode settings](/design_docs/vscode_extensions.md#settings-and-settings-utility), using the following format:
 
 ```json
 {

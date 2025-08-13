@@ -48,7 +48,7 @@ The project explorer will analyze files in the users workspace, assemble tree da
 
 #### Tree Item Settings
 
-The user can define settings in the VSCode settings that determine what files get watched, so they can be parsed and added to the tree. Some tree items will define their own settings, but most will use the a default setting with a list of watch paths and parser types like:
+The user can define settings in the [VSCode settings](/design_docs/vscode_extensions.md#settings-and-settings-utility) that determine what files get watched, so they can be parsed and added to the tree. Some tree items will define their own settings, but most will use the a default setting with a list of watch paths and parser types like:
 
 ```json
 {

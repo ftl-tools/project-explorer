@@ -4,7 +4,7 @@ Doc tree items allow users to traverse documentation in their workspace. This do
 
 ## Settings
 
-Users can add zero or more doc watch paths to the [watch path settings](/design_docs/project_explorer.md#tree-item-settings). Note that the search path can be a folder or a single document.
+Users can add zero or more doc watch paths to the [watch path settings](/design_docs/project_explorer.md#tree-item-settings) in the [VSCode settings](/design_docs/vscode_extensions.md#settings-and-settings-utility). Note that the search path can be a folder or a single document.
 
 ```json
 {
@@ -133,7 +133,7 @@ We want a [tree item builder](/design_docs/project_explorer.md#tree-builder) tha
 
 ## Custom Interactions
 
-There should be an optional vscode setting called `openDocsInPreview` if this is false tapping on doc tree items should open them in the default editor, if true or not set, then tapping on doc tree items should open them using VSCode's markdown preview.
+There should be an optional vscode setting called `openDocsInPreview` in the [VSCode settings](/design_docs/vscode_extensions.md#settings-and-settings-utility). If this is false tapping on doc tree items should open them in the default editor; if true or not set, then tapping on doc tree items should open them using VSCode's markdown preview.
 
 <details>
 <summary>Test that</summary>

@@ -226,23 +226,18 @@ export async function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "projectExplorer.openSettings",
       async () => {
-        const hasWs = (vscode.workspace.workspaceFolders?.length || 0) > 0;
-        if (hasWs) {
-          await vscode.commands.executeCommand(
-            "workbench.action.openWorkspaceSettings",
-          );
-          await vscode.commands.executeCommand(
-            "workbench.action.openSettings",
-            "@ext:ftl-tools.ftl-project-explorer",
-          );
-        } else {
-          vscode.window.showInformationMessage(
-            "Workspace settings are unavailable. Opening User settings.",
-          );
-          await vscode.commands.executeCommand(
-            "workbench.action.openSettings",
-            "@ext:ftl-tools.ftl-project-explorer",
-          );
+        const settings = await import("./utils/settingsUtil");
+        const { openedUri, firstKey } = await settings.format();
+        const doc = await vscode.workspace.openTextDocument(openedUri);
+        const editor = await vscode.window.showTextDocument(doc, { preview: false });
+        if (firstKey) {
+          const text = doc.getText();
+          const idx = text.indexOf(`"${firstKey}"`);
+          if (idx >= 0) {
+            const pos = doc.positionAt(idx + 1);
+            editor.revealRange(new vscode.Range(pos, pos), vscode.TextEditorRevealType.InCenter);
+            editor.selection = new vscode.Selection(pos, pos);
+          }
         }
       },
     ),

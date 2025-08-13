@@ -49,15 +49,27 @@ The extension should watch a vscode workspace setting named `brainstormingDocPat
 
 ## Settings
 
-Always visible. Uses the built-in gear codicon (`$(gear)`). Tooltip: "Project Explorer Settings". Clicking opens the VS Code Settings UI filtered to this extension's settings using the query `@ext:ftl-tools.ftl-project-explorer`. If at least one workspace folder is open, open the Workspace settings view; otherwise open the User settings view and show a small info notification that workspace settings are unavailable. Never open JSON settings files; always use the Settings UI.
+Always visible. Uses the built-in gear codicon (`$(gear)`). Tooltip: "Project Explorer Settings".
+
+Clicking opens the workspace settings JSON (settings.json) when a workspace is open; with no workspace, open the user settings JSON.
+
+Implementation notes: Delegate all organization and default injection to the [Settings Utility](/design_docs/vscode_extensions.md#settings-and-settings-utility). The action should:
+- Call [settingsUtil.format()](/design_docs/vscode_extensions.md#settings-and-settings-utility) to group `ftl-tools.*` keys and add missing defaults without overwriting existing values.
+- Open the returned URI in an editor and reveal the first `ftl-tools.*` key position if provided.
+
+Notes:
+- Operate only on JSON, not the Settings UI.
+- If multiple workspaces are open, the Settings Utility should target the first workspace folder’s settings.json.
 
 <details>
 <summary>Test that</summary>
 
 - The Settings action is always visible with gear codicon and tooltip "Project Explorer Settings".
-- With a workspace open, clicking opens the Settings UI to Workspace scope filtered by @ext:ftl-tools.ftl-project-explorer; with no workspace, opens User settings and shows an info notification about workspace settings.
-- Settings open in the Settings UI, never JSON; command leaves current editors untouched and does not change files unintentionally.
-- Filtering shows only this extension’s settings; toggling a setting reflects in behavior immediately where applicable.
+- With a workspace open, clicking opens .vscode/settings.json (or the workspace settings.json) in an editor; with no workspace, opens the user settings.json.
+- In the opened JSON, all keys starting with `ftl-tools.` are grouped contiguously near the first such key; existing values are preserved; comments adjacent to moved keys remain when feasible.
+- Any known missing settings for this extension are added with default values; existing user-defined values are not overwritten.
+- The cursor/selection jumps to the first `ftl-tools.*` setting in the file.
+- If settings.json does not exist, it is created as a valid JSON object containing the default `ftl-tools.*` settings.
 
 [How to Test](/design_docs/vscode_extensions.md#testing)
 
